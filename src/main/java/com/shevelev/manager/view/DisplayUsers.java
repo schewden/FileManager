@@ -8,19 +8,19 @@ import java.awt.*;
  */
 public class DisplayUsers {
     private JFrame frame;
-    private JPanel northPanel;
+    private JPanel panelCenter;
 
     public DisplayUsers(){
         frame = new JFrame("FM DiiShev");
-        new NorthMenu(frame);
+        HomeNorthPanel homeNorthPanel = new HomeNorthPanel(frame);
+        new TopPanelMenu(frame,homeNorthPanel.getPanel());
+        panelCenter = new JPanel();
+        frame.add(panelCenter, BorderLayout.CENTER);
+
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setSize(800,600);
         frame.setLocationRelativeTo(null);
-        northPanel = new JPanel();
-        frame.add(northPanel,BorderLayout.NORTH);
-        northPanel.setLayout(new GridBagLayout());
-        new NorthMenu(northPanel);
-        //frame.pack();
+        frame.pack();
         frame.setVisible(true);
     }
 }
