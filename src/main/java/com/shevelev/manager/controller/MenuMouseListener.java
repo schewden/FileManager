@@ -9,40 +9,42 @@ import java.awt.event.MouseListener;
  */
 public class MenuMouseListener implements MouseListener {
     private JMenu menuFile;
-    private JPanel panelHomeNorth;
+    JTabbedPane tabbedPane;
 
-
-    public MenuMouseListener(JMenu menuFile, JPanel panelHomeNorth) {
+    public MenuMouseListener(JMenu menuFile, JTabbedPane tabbedPane) {
         this.menuFile = menuFile;
-        this.panelHomeNorth = panelHomeNorth;
+        this.tabbedPane = tabbedPane;
     }
 
-
     public void mouseClicked(MouseEvent e) {
-
+        if (!menuFile.isPopupMenuVisible()) {
+            tabbedPane.setVisible(true);
+        }else {
+            tabbedPane.setVisible(false);
+        }
     }
 
     public void mousePressed(MouseEvent e) {
-        if (menuFile.isSelected()) {
-            panelHomeNorth.setVisible(false);
+        if (!menuFile.isPopupMenuVisible()) {
+            tabbedPane.setVisible(true);
+        }else {
+            tabbedPane.setVisible(false);
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (!menuFile.isSelected()) {
-            panelHomeNorth.setVisible(false);
+        if (!menuFile.isPopupMenuVisible()) {
+            tabbedPane.setVisible(true);
+        }else {
+            tabbedPane.setVisible(false);
         }
     }
 
     public void mouseEntered(MouseEvent e) {
-        if (menuFile.isPopupMenuVisible()) {
-            panelHomeNorth.setVisible(false);
-        }
+
     }
 
     public void mouseExited(MouseEvent e) {
-        if (!menuFile.isPopupMenuVisible()) {
-            panelHomeNorth.setVisible(true);
-        }
+
     }
 }

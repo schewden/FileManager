@@ -5,7 +5,6 @@ import com.shevelev.manager.model.FileInDirectory;
 import com.shevelev.manager.model.PathToDirectory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,15 +16,14 @@ public class TreeFileManager {
     private List<String> listFileToDirectory;
     PathToDirectory pathToDirectory;
 
-    public List getListFile(FileInDirectory fileInDirectory){
-        if (pathDirectory.isDirectory()){
+    public List<String> getListFile(FileInDirectory fileInDirectory) {
+        if (pathDirectory.isDirectory()) {
             pathDirectory = fileInDirectory.getFile();
-            listFileToDirectory = new ArrayList<String>();
             listFileToDirectory = Arrays.asList(pathDirectory.list());
             pathToDirectory = new PathToDirectory(pathDirectory.getAbsolutePath());
 
             return  listFileToDirectory;
-        }else {
+        } else {
             return null;
         }
     }
