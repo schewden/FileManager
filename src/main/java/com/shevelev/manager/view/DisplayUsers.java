@@ -26,7 +26,7 @@ public class DisplayUsers {
         new PanelByDirectory(panelDirectory);
 
         panelCenter = new JPanel();
-        frame.add(panelCenter, BorderLayout.WEST);
+        frame.add(panelCenter, BorderLayout.CENTER);
         new PanelDisplayDirectory(panelCenter);
 
         panelTree = new JPanel();
@@ -34,7 +34,7 @@ public class DisplayUsers {
         new PanelTree(panelTree);
 
         panelInfo = new JPanel();
-        frame.add(panelInfo,BorderLayout.EAST);
+        frame.add(panelInfo,BorderLayout.SOUTH);
         new PanelInfoAboutDirectory(panelInfo);
 
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);

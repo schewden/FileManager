@@ -1,38 +1,31 @@
 package com.shevelev.manager.controller;
 
 
-import com.shevelev.manager.model.FileInDirectory;
-import com.shevelev.manager.model.PathToDirectory;
-
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileFilter;
 
 /**
  * Created by denis on 21.10.17.
  */
 public class TreeFileManager {
-    private File pathDirectory;
-    private List<String> listFileToDirectory;
-    PathToDirectory pathToDirectory;
 
-    public List<String> getListFile(FileInDirectory fileInDirectory) {
-        if (pathDirectory.isDirectory()) {
-            pathDirectory = fileInDirectory.getFile();
-            listFileToDirectory = Arrays.asList(pathDirectory.list());
-            pathToDirectory = new PathToDirectory(pathDirectory.getAbsolutePath());
+    public void createChild(File fileRoot, DefaultMutableTreeNode node){
+        File[] files = fileRoot.listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                return !pathname.isHidden();
+            }
+        });
+        if (files != null){
+            for (File nodeFile : files){
 
-            return  listFileToDirectory;
-        } else {
-            return null;
+                if (nodeFile.isDirectory()){
+                    DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(nodeFile);
+                    node.add(childNode);
+                    System.out.println(childNode);
+                    createChild(nodeFile,childNode);
+                }
+            }
         }
     }
-
-
-
-
-
-
-
-
 }
