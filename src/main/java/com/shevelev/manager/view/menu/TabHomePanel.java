@@ -1,5 +1,11 @@
 package com.shevelev.manager.view.menu;
 
+import com.shevelev.manager.controller.tab.TabHomePanelListener;
+import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.view.PanelDisplayDirectory;
+import com.shevelev.manager.view.PanelInfoAboutDirectory;
+import com.shevelev.manager.view.PanelTree;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -28,12 +34,15 @@ public class TabHomePanel {
 
     private Font font;
 
+    private TabHomePanelListener homeListener;
+
     /**
      * Constructor
      */
-    public TabHomePanel() {
+    public TabHomePanel(JFrame frame, DirectoryFile directoryFile, PanelDisplayDirectory panelDisplayDirectory, PanelInfoAboutDirectory panelInfoAboutDirectory, PanelTree panelTree) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
+        homeListener = new TabHomePanelListener(frame, directoryFile, panelDisplayDirectory,panelInfoAboutDirectory,panelTree);
 
         font = new Font("Times New Roman", Font.ITALIC, 11);
         copy = new JButton();
@@ -59,6 +68,7 @@ public class TabHomePanel {
 
         createDirectory = new JButton();
         addButtonItem(createDirectory, "src/main/resources/images/Folder.png", 7);
+        createDirectory.addActionListener(homeListener);
 
         copyLabel = new JLabel();
         addButtonLabel(copyLabel,"Копировать",0);

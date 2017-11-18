@@ -72,7 +72,6 @@ public class TabViewPanel {
     private void addButtonItem(JButton newButton, String pathButtonIcon,int gridx){
         newButton.setIcon(new ImageIcon(pathButtonIcon));
         newButton.setBackground(Color.WHITE);
-        //newButton.setMaximumSize(new Dimension(66,42));
         panel.add(newButton,new GridBagConstraints(gridx,0,1,1,0,0,GridBagConstraints.CENTER,GridBagConstraints.NONE,new Insets(1,1,1,1),0,0));
     }
 

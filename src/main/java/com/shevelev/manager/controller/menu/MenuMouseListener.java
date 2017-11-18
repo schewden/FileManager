@@ -1,4 +1,4 @@
-package com.shevelev.manager.controller;
+package com.shevelev.manager.controller.menu;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;

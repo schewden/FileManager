@@ -1,4 +1,4 @@
-package com.shevelev.manager.controller;
+package com.shevelev.manager.controller.panel.west.tree;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -11,6 +11,9 @@ import java.io.File;
  * Created by denis on 31.10.17.
  */
 public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
+    private final String OPENICON = "src/main/resources/images/fileopen.png";
+    private final String CLOSEICON = "src/main/resources/images/filenew.png";
+    private final String LEAFCON = "src/main/resources/images/filenew.png";
     private FileSystemView fileSystemView;
 
     public FileTreeCellRenderer() {
@@ -23,9 +26,9 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         File file = (File)node.getUserObject();
         setText(fileSystemView.getSystemDisplayName(file));
-        setOpenIcon(new ImageIcon("src/main/resources/images/fileopen.png"));
-        setClosedIcon(new ImageIcon("src/main/resources/images/filenew.png"));
-        setLeafIcon(new ImageIcon("src/main/resources/images/filenew.png"));
+        setOpenIcon(new ImageIcon(OPENICON));
+        setClosedIcon(new ImageIcon(CLOSEICON));
+        setLeafIcon(new ImageIcon(LEAFCON));
         return this;
     }
 

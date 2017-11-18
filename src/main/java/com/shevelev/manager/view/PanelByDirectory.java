@@ -46,7 +46,6 @@ public class PanelByDirectory {
     }
 
     private void addButtonItem(JButton newButton, String pathButtonIcon){
-        System.out.println(newButton.getPreferredSize());
         newButton.setPreferredSize(new Dimension(34,29));
         newButton.setIcon(new ImageIcon(pathButtonIcon));
         newButton.setBackground(Color.WHITE);
