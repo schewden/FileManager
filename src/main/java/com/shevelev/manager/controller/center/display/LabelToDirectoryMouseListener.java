@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,7 +40,9 @@ public class LabelToDirectoryMouseListener implements MouseListener {
             label.setBorder(BorderFactory.createLineBorder(Color.black));
         }
         if (e.getClickCount() == 1) {
-            List<File> fileList = Arrays.asList(directoryFile.getDirectoryFile().listFiles());
+            //List<File> fileList = Arrays.asList(directoryFile.getDirectoryFile().listFiles());
+            List<File> fileList = new ArrayList<File>();
+            fileList.addAll(directoryFile.getDirectoryFileList());
             for (int i = 0; i < fileList.size(); i++) {
                 String fileNameInList = fileList.get(i).getName();
                 if (fileNameInList.equals(labelFileName)) {
@@ -52,17 +54,18 @@ public class LabelToDirectoryMouseListener implements MouseListener {
 
         if (e.getClickCount() == 2) {
             TreePath currentPath;
-            List<File> directoryList = directoryFile.getDirectoryList();
+            List<File> directoryList = new ArrayList<File>();
+            directoryList.addAll(directoryFile.getDirectoryList());
                 for (int i = 0; i<directoryList.size();i++) {
                     String directoryNameInList = directoryList.get(i).getName();
                     if (directoryNameInList.equals(labelFileName)) {
-                        directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
+                        //directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
 
                         currentPath = panelDisplayDirectory.getPanelTree().interactionPanelAndTree(directoryList.get(i).getAbsoluteFile());
                         panelDisplayDirectory.getPanelTree().getTreeDirectory().setSelectionPath(currentPath);
                         panelDisplayDirectory.getPanelTree().getTreeDirectory().expandPath(currentPath);
                         panelDisplayDirectory.getPanelTree().getTreeDirectory().scrollPathToVisible(currentPath);
-
+                        directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
                         //System.out.println(currentPath.getLastPathComponent());
 
                         displayUsers.repaintGUI();

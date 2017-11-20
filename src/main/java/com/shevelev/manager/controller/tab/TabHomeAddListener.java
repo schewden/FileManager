@@ -43,7 +43,6 @@ public class TabHomeAddListener implements ActionListener {
         if (result == JOptionPane.YES_OPTION){
             try{
                 File parentFile = directoryFile.getDirectoryFile();
-
                 File newFile = new File(parentFile,newFilePanel.getName().getText());
                 if (newFilePanel.getNewTypeDirectory().isSelected()){
                     createdObject = newFile.mkdir();

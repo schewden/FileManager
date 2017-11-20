@@ -6,6 +6,8 @@ import com.shevelev.manager.view.PanelTree;
 import com.shevelev.manager.view.menu.RenamePanel;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,6 +22,7 @@ public class TabHomeRenameListener implements ActionListener {
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
 
+    private boolean renameObject;
     private File currentSelectedFile;
 
     public TabHomeRenameListener(JFrame frame, DirectoryFile directoryFile,
@@ -34,18 +37,42 @@ public class TabHomeRenameListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         currentSelectedFile = directoryFile.getSelectedFile();
 
-        RenamePanel newFilePanel = new RenamePanel();
-        UIManager.put("OptionPane.yesButtonText", "Создать");
+        RenamePanel renamePanel = new RenamePanel();
+        UIManager.put("OptionPane.yesButtonText", "Переименовать");
         UIManager.put("OptionPane.noButtonText", "Отмена");
 
         int result = JOptionPane.showConfirmDialog(frame,
-                newFilePanel.getRenamePanel(),
+                renamePanel.getRenamePanel(),
                 "Переименовать",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION){
+            try{
+                File newFile = new File(currentSelectedFile.getParent(),renamePanel.getName().getText());
+                renameObject = currentSelectedFile.renameTo(newFile);
+                if (renameObject){
+                    if (newFile.isDirectory()){
+                        TreePath parentPath = panelTree.interactionPanelAndTree(currentSelectedFile.getParentFile());
+                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 
+                        TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
+                        DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
 
+                        panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
 
+                        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
+                        panelTree.getDefaultTreeModel().insertNodeInto(newNode,parentNode,parentNode.getChildCount());
 
+                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
+                        displayUsers.repaintGUI();
+                    }else {
+                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
+                        displayUsers.repaintGUI();
+                    }
+                }
+            }catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
     }
 }

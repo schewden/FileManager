@@ -56,7 +56,7 @@ public class PanelDisplayDirectory {
     }
 
     public void addLabelInPanel(){
-        List<File> listCurrentFile =  directoryFile.getDirectoryFileList();
+        List<File> listCurrentFile = directoryFile.getDirectoryFileList();
         List<File> directoryList = new ArrayList<File>();
         List<File> fileList = new ArrayList<File>();
 

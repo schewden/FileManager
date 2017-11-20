@@ -31,7 +31,7 @@ public class PanelTree {
         selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        treeDirectory.addTreeSelectionListener(new TreeListener(directoryFile,panelDisplayDirectory,displayUsers));
+        treeDirectory.addTreeSelectionListener(new TreeListener(directoryFile,panelDisplayDirectory,displayUsers,this));
         scrollPane = new JScrollPane(treeDirectory);
         scrollPane.setPreferredSize(new Dimension(200,390));
 
@@ -45,8 +45,7 @@ public class PanelTree {
         if (files != null){
             for (File nodeFile : files){
                 if (nodeFile.isDirectory()){
-                    DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(nodeFile);
-                    root.add(childNode);
+                    root.add(new DefaultMutableTreeNode(nodeFile));
                 }
             }
         }
@@ -60,7 +59,7 @@ public class PanelTree {
         return treeDirectory;
     }
 
-    public TreePath interactionPanelAndTree(File currentFile){
+        public TreePath interactionPanelAndTree(File currentFile){
         for (int i = 0; i<treeDirectory.getRowCount(); i++){
             TreePath currentTreePath = treeDirectory.getPathForRow(i);
             Object lastObjectInTreePath = currentTreePath.getLastPathComponent();
