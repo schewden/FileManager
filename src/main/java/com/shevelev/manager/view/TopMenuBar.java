@@ -20,11 +20,11 @@ public class TopMenuBar {
     private TabHomePanel tabHomePanel;
     private TabViewPanel tabViewPanel;
 
-    public TopMenuBar(JFrame frame, JPanel panel, DirectoryFile directoryFile,PanelDisplayDirectory panelDisplayDirectory, PanelInfoAboutDirectory panelInfoAboutDirectory,PanelTree panelTree){
-        panel.setLayout(new BorderLayout());
+    public TopMenuBar(JFrame frame, JPanel panelMenu, DirectoryFile directoryFile,PanelTree panelTree, DisplayUsers displayUsers){
+        panelMenu.setLayout(new BorderLayout());
         Font font = new Font("Times New Roman", Font.ITALIC, 14);
         tabbedPane = new JTabbedPane();
-        tabHomePanel = new TabHomePanel(frame,directoryFile,panelDisplayDirectory,panelInfoAboutDirectory,panelTree);
+        tabHomePanel = new TabHomePanel(frame,directoryFile,panelTree,displayUsers);
         tabViewPanel = new TabViewPanel();
         menuBar = new JMenuBar();
 
@@ -35,7 +35,7 @@ public class TopMenuBar {
         new ButtonFileMenu(menuFile);
         menuBar.add(menuFile);
 
-        panel.add(tabbedPane,BorderLayout.NORTH);
+        panelMenu.add(tabbedPane,BorderLayout.NORTH);
         tabbedPane.add("Главная", tabHomePanel.getPanel());
         tabbedPane.add("Вид", tabViewPanel.getPanel());
         tabbedPane.setFont(font);

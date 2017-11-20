@@ -1,14 +1,16 @@
 package com.shevelev.manager.controller.center.display;
 
 import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelDisplayDirectory;
-import com.shevelev.manager.view.PanelInfoAboutDirectory;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -16,22 +18,19 @@ public class LabelToDirectoryMouseListener implements MouseListener {
     private JLabel label;
     private DirectoryFile directoryFile;
     private PanelDisplayDirectory panelDisplayDirectory;
-    private JPanel panelInfo;
-    private PanelInfoAboutDirectory panelInfoDir;
-    private JFrame frame;
+    private DisplayUsers displayUsers;
     private JLabel[] allotmentLabel;
 
-    public LabelToDirectoryMouseListener(DirectoryFile directoryFile, JFrame frame, PanelDisplayDirectory panelDisplayDirectory, JPanel panelInfo,PanelInfoAboutDirectory panelInfoDir) {
+    public LabelToDirectoryMouseListener(DirectoryFile directoryFile, PanelDisplayDirectory panelDisplayDirectory, DisplayUsers displayUsers) {
         this.directoryFile = directoryFile;
         this.panelDisplayDirectory = panelDisplayDirectory;
-        this.frame = frame;
-        this.panelInfo=panelInfo;
-        this.panelInfoDir = panelInfoDir;
+        this.displayUsers = displayUsers;
         allotmentLabel = new JLabel[1];
     }
 
     public void mouseClicked(MouseEvent e) {
         label = (JLabel) e.getSource();
+        String labelFileName = label.getText();
         if (allotmentLabel[0] == null){
             allotmentLabel[0] = label;
             label.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -40,24 +39,33 @@ public class LabelToDirectoryMouseListener implements MouseListener {
             allotmentLabel[0] = label;
             label.setBorder(BorderFactory.createLineBorder(Color.black));
         }
+        if (e.getClickCount() == 1) {
+            List<File> fileList = Arrays.asList(directoryFile.getDirectoryFile().listFiles());
+            for (int i = 0; i < fileList.size(); i++) {
+                String fileNameInList = fileList.get(i).getName();
+                if (fileNameInList.equals(labelFileName)) {
+                    System.out.println(fileList.get(i).getAbsoluteFile());
+                    directoryFile.setSelectedFile(fileList.get(i).getAbsoluteFile());
+                }
+            }
+        }
 
         if (e.getClickCount() == 2) {
-            String directroyName = label.getText();
+            TreePath currentPath;
             List<File> directoryList = directoryFile.getDirectoryList();
                 for (int i = 0; i<directoryList.size();i++) {
                     String directoryNameInList = directoryList.get(i).getName();
-                    if (directoryNameInList.equals(directroyName)) {
+                    if (directoryNameInList.equals(labelFileName)) {
                         directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
 
-                        panelDisplayDirectory.getPanelInPanel().removeAll();
-                        panelDisplayDirectory.getPanel().removeAll();
-                        panelDisplayDirectory.addLabelInPanel();
+                        currentPath = panelDisplayDirectory.getPanelTree().interactionPanelAndTree(directoryList.get(i).getAbsoluteFile());
+                        panelDisplayDirectory.getPanelTree().getTreeDirectory().setSelectionPath(currentPath);
+                        panelDisplayDirectory.getPanelTree().getTreeDirectory().expandPath(currentPath);
+                        panelDisplayDirectory.getPanelTree().getTreeDirectory().scrollPathToVisible(currentPath);
 
-                        panelInfo.removeAll();
-                        panelInfoDir.addPanelInfo();
+                        //System.out.println(currentPath.getLastPathComponent());
 
-                        frame.repaint();
-                        frame.validate();
+                        displayUsers.repaintGUI();
                     }
                 }
         }

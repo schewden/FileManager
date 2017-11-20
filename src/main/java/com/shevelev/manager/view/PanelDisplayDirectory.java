@@ -17,40 +17,42 @@ public class PanelDisplayDirectory {
     private final String ICON_FILE = "src/main/resources/images/documents32.png";
     private final Dimension DIMENSION_LABEL = new Dimension(106,32);
 
-    private JPanel panelInPanel;
+    private JPanel panelInPanelCenter;
     private JScrollPane scrollPane;
-    private JLabel label;
+    private JLabel labelFile;
     private LabelToDirectoryMouseListener mouseListener;
     private DirectoryFile directoryFile;
-    private JPanel panel;
+    private JPanel panelCenter;
+    private PanelTree panelTree;
 
-    public PanelDisplayDirectory(JFrame frame,PanelInfoAboutDirectory panelInfoDir, JPanel panelInfo, JPanel panelCenter, DirectoryFile directoryFile){
-        this.panel = panelCenter;
+    public PanelDisplayDirectory(JPanel panelCenter, DirectoryFile directoryFile,DisplayUsers displayUsers){
+        this.panelCenter = panelCenter;
         this.directoryFile = directoryFile;
-        panelInPanel = new JPanel();
-        panelInPanel.setBackground(Color.WHITE);
-        panelInPanel.setPreferredSize(new Dimension(580,1000));
-        panelInPanel.setLayout(new FlowLayout(FlowLayout.LEADING,5,5));
-        mouseListener = new LabelToDirectoryMouseListener(directoryFile,frame, this, panelInfo, panelInfoDir);
-        setPanel(panelCenter);
+
+        panelInPanelCenter = new JPanel();
+        panelInPanelCenter.setBackground(Color.WHITE);
+        panelInPanelCenter.setPreferredSize(new Dimension(580,1000));
+        panelInPanelCenter.setLayout(new FlowLayout(FlowLayout.LEADING,5,5));
+        mouseListener = new LabelToDirectoryMouseListener(directoryFile, this, displayUsers);
+
         addLabelInPanel();
 
     }
 
-    public JPanel getPanel() {
-        return panel;
+    public JPanel getPanelCenter() {
+        return panelCenter;
     }
 
-    public void setPanel(JPanel panel) {
-        this.panel = panel;
+    public JPanel getPanelInPanelCenter() {
+        return panelInPanelCenter;
     }
 
-    public JPanel getPanelInPanel() {
-        return panelInPanel;
+    public PanelTree getPanelTree() {
+        return panelTree;
     }
 
-    private void setPanelInPanel(JPanel panelInPanel) {
-        this.panelInPanel = panelInPanel;
+    public void setPanelTree(PanelTree panelTree) {
+        this.panelTree = panelTree;
     }
 
     public void addLabelInPanel(){
@@ -59,27 +61,26 @@ public class PanelDisplayDirectory {
         List<File> fileList = new ArrayList<File>();
 
         for (int i = 0; i<listCurrentFile.size(); i++) {
-            label = new JLabel(listCurrentFile.get(i).getName());
+            labelFile = new JLabel(listCurrentFile.get(i).getName());
 
             if (listCurrentFile.get(i).isDirectory()) {
-                label.setIcon(new ImageIcon(ICON_DIRECTORY));
+                labelFile.setIcon(new ImageIcon(ICON_DIRECTORY));
                 directoryList.add(listCurrentFile.get(i));
                 directoryFile.setDirectoryList(directoryList);
             } else {
                 fileList.add(listCurrentFile.get(i));
                 directoryFile.setFileList(fileList);
-                label.setIcon(new ImageIcon(ICON_FILE));
+                labelFile.setIcon(new ImageIcon(ICON_FILE));
             }
-            label.setToolTipText(label.getText());
-            label.addMouseListener(mouseListener);
-            label.setPreferredSize(DIMENSION_LABEL);
-            panelInPanel.add(label);
-            setPanelInPanel(panelInPanel);
+            labelFile.setToolTipText(labelFile.getText());
+            labelFile.addMouseListener(mouseListener);
+            labelFile.setPreferredSize(DIMENSION_LABEL);
+            panelInPanelCenter.add(labelFile);
         }
 
-        scrollPane = new JScrollPane(panelInPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane = new JScrollPane(panelInPanelCenter,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(580,390));
 
-        panel.add(scrollPane);
+        panelCenter.add(scrollPane);
     }
 }

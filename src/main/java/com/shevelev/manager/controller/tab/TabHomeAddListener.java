@@ -1,13 +1,13 @@
 package com.shevelev.manager.controller.tab;
 
 import com.shevelev.manager.model.DirectoryFile;
-import com.shevelev.manager.view.PanelDisplayDirectory;
-import com.shevelev.manager.view.PanelInfoAboutDirectory;
+import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 import com.shevelev.manager.view.menu.NewFilePanel;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -15,21 +15,19 @@ import java.io.File;
 /**
  * Created by denis on 16.11.17.
  */
-public class TabHomePanelListener implements ActionListener {
-    private JFrame frame;
-    private JButton button;
+public class TabHomeAddListener implements ActionListener {
     private boolean createdObject;
-    private DirectoryFile directoryFile;
-    private PanelDisplayDirectory panelDisplayDirectory;
-    private PanelInfoAboutDirectory panelInfoAboutDirectory;
-    private PanelTree panelTree;
 
-    public TabHomePanelListener(JFrame frame, DirectoryFile directoryFile, PanelDisplayDirectory panelDisplayDirectory, PanelInfoAboutDirectory panelInfoAboutDirectory, PanelTree panelTree){
+    private JFrame frame;
+    private DirectoryFile directoryFile;
+    private PanelTree panelTree;
+    private DisplayUsers displayUsers;
+
+    public TabHomeAddListener(JFrame frame, DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers){
         this.frame = frame;
         this.directoryFile = directoryFile;
-        this.panelDisplayDirectory = panelDisplayDirectory;
-        this.panelInfoAboutDirectory = panelInfoAboutDirectory;
         this.panelTree = panelTree;
+        this.displayUsers = displayUsers;
     }
     public void actionPerformed(ActionEvent e) {
         NewFilePanel newFilePanel = new NewFilePanel();
@@ -53,23 +51,17 @@ public class TabHomePanelListener implements ActionListener {
                     createdObject = newFile.createNewFile();
                 }
                 if (createdObject){
-                    DefaultMutableTreeNode parentNode  = new DefaultMutableTreeNode(parentFile);
+                    TreePath treePath = panelTree.interactionPanelAndTree(parentFile);
+                    DefaultMutableTreeNode parentNode  = (DefaultMutableTreeNode) treePath.getLastPathComponent();
                     if (newFile.isDirectory()){
                         DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
+
                         panelTree.getDefaultTreeModel().insertNodeInto(newNode,parentNode, parentNode.getChildCount());
                     }
 
                     directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
 
-                    panelDisplayDirectory.getPanelInPanel().removeAll();
-                    panelDisplayDirectory.getPanel().removeAll();
-                    panelDisplayDirectory.addLabelInPanel();
-
-                    panelInfoAboutDirectory.getPanelInfo().removeAll();
-                    panelInfoAboutDirectory.addPanelInfo();
-
-                    frame.repaint();
-                    frame.validate();
+                    displayUsers.repaintGUI();
                 }
             }catch (Throwable t) {
                 t.printStackTrace();

@@ -10,9 +10,18 @@ import java.util.List;
 public class DirectoryFile {
 
     private File directoryFile;
+    private File selectedFile;
     private List<File> directoryList;
     private List<File> fileList;
     private List<File> directoryFileList;
+
+    public File getSelectedFile() {
+        return selectedFile;
+    }
+
+    public void setSelectedFile(File selectedFile) {
+        this.selectedFile = selectedFile;
+    }
 
     public List<File> getDirectoryFileList() {
         return directoryFileList;

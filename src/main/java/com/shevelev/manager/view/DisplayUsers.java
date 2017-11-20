@@ -17,31 +17,36 @@ public class DisplayUsers {
     private JPanel panelTree;
     private JPanel panelInfo;
 
+    private DirectoryFile directoryFile;
+    private PanelDisplayDirectory panelDisplayDirectory;
+    private PanelTree panelTreeClass;
+    private PanelInfoAboutDirectory panelInfoAboutDirectory;
+
     public DisplayUsers() {
         frame = new JFrame("FM DiiShev");
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(800,600));
 
-        DirectoryFile directoryFile = new DirectoryFile();
+        directoryFile = new DirectoryFile();
 
         directoryFile.setDirectoryFile(new File("/"));
 
         panelInfo = new JPanel();
         frame.add(panelInfo,BorderLayout.SOUTH);
-        PanelInfoAboutDirectory panelInfoAboutDirectory = new PanelInfoAboutDirectory(panelInfo, directoryFile);
+        panelInfoAboutDirectory = new PanelInfoAboutDirectory(panelInfo, directoryFile);
 
         panelCenter = new JPanel();
         frame.add(panelCenter, BorderLayout.CENTER);
         ///new PanelTable(panelCenter);
-        PanelDisplayDirectory panelDisplayDirectory = new PanelDisplayDirectory(frame,panelInfoAboutDirectory, panelInfo, panelCenter, directoryFile);
+        panelDisplayDirectory = new PanelDisplayDirectory(panelCenter, directoryFile,this);
 
         panelTree = new JPanel();
         frame.add(panelTree,BorderLayout.WEST);
-        PanelTree panelTree = new PanelTree(frame, panelInfoAboutDirectory, panelInfo, panelDisplayDirectory, this.panelTree, directoryFile);
+        panelTreeClass = new PanelTree(panelDisplayDirectory, panelTree, directoryFile,this);
 
         panelMenu = new JPanel();
         frame.add(panelMenu,BorderLayout.NORTH);
-        new TopMenuBar(frame,panelMenu,directoryFile,panelDisplayDirectory,panelInfoAboutDirectory,panelTree);
+        new TopMenuBar(frame,panelMenu,directoryFile,panelTreeClass,this);
 
         panelDirectory = new JPanel();
         panelMenu.add(panelDirectory,BorderLayout.SOUTH );
@@ -51,5 +56,17 @@ public class DisplayUsers {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
+    }
+
+    public void repaintGUI(){
+        panelDisplayDirectory.getPanelInPanelCenter().removeAll();
+        panelCenter.removeAll();
+        panelDisplayDirectory.addLabelInPanel();
+
+        panelInfo.removeAll();
+        panelInfoAboutDirectory.addPanelInfo();
+
+        frame.repaint();
+        frame.validate();
     }
 }

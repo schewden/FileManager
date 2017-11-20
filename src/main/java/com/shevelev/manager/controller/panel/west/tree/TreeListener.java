@@ -1,10 +1,9 @@
 package com.shevelev.manager.controller.panel.west.tree;
 
 import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelDisplayDirectory;
-import com.shevelev.manager.view.PanelInfoAboutDirectory;
 
-import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -16,17 +15,13 @@ import java.io.File;
 public class TreeListener  implements TreeSelectionListener {
     private DirectoryFile directoryFile;
     private PanelDisplayDirectory panelDisplayDirectory;
-    private JFrame frame;
-    private PanelInfoAboutDirectory panelInfoDir;
-    private JPanel panelInfo;
     private TreeFileManager treeFileManager;
+    private DisplayUsers displayUsers;
 
-    public TreeListener(JFrame frame, PanelInfoAboutDirectory panelInfoDir, JPanel panelInfo, DirectoryFile directoryFile, PanelDisplayDirectory panelDisplayDirectory){
-        this.frame = frame;
-        this.panelInfoDir = panelInfoDir;
-        this.panelInfo = panelInfo;
+    public TreeListener(DirectoryFile directoryFile, PanelDisplayDirectory panelDisplayDirectory, DisplayUsers displayUsers){
         this.directoryFile = directoryFile;
         this.panelDisplayDirectory = panelDisplayDirectory;
+        this.displayUsers = displayUsers;
     }
 
     public void valueChanged(TreeSelectionEvent e) {
@@ -35,14 +30,6 @@ public class TreeListener  implements TreeSelectionListener {
         treeFileManager.createChild(node);
         directoryFile.setDirectoryFile((File)node.getUserObject());
 
-        panelDisplayDirectory.getPanelInPanel().removeAll();
-        panelDisplayDirectory.getPanel().removeAll();
-        panelDisplayDirectory.addLabelInPanel();
-
-        panelInfo.removeAll();
-        panelInfoDir.addPanelInfo();
-
-        frame.repaint();
-        frame.validate();
+        displayUsers.repaintGUI();
     }
 }

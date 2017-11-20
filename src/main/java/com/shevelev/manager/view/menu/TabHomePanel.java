@@ -1,9 +1,10 @@
 package com.shevelev.manager.view.menu;
 
-import com.shevelev.manager.controller.tab.TabHomePanelListener;
+import com.shevelev.manager.controller.tab.TabHomeAddListener;
+import com.shevelev.manager.controller.tab.TabHomeDeleteListener;
+import com.shevelev.manager.controller.tab.TabHomeRenameListener;
 import com.shevelev.manager.model.DirectoryFile;
-import com.shevelev.manager.view.PanelDisplayDirectory;
-import com.shevelev.manager.view.PanelInfoAboutDirectory;
+import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 
 import javax.swing.*;
@@ -34,15 +35,12 @@ public class TabHomePanel {
 
     private Font font;
 
-    private TabHomePanelListener homeListener;
-
     /**
      * Constructor
      */
-    public TabHomePanel(JFrame frame, DirectoryFile directoryFile, PanelDisplayDirectory panelDisplayDirectory, PanelInfoAboutDirectory panelInfoAboutDirectory, PanelTree panelTree) {
+    public TabHomePanel(JFrame frame, DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        homeListener = new TabHomePanelListener(frame, directoryFile, panelDisplayDirectory,panelInfoAboutDirectory,panelTree);
 
         font = new Font("Times New Roman", Font.ITALIC, 11);
         copy = new JButton();
@@ -62,13 +60,15 @@ public class TabHomePanel {
 
         delete = new JButton();
         addButtonItem(delete, "src/main/resources/images/del.png", 5);
+        delete.addActionListener(new TabHomeDeleteListener(frame, directoryFile,panelTree,displayUsers));
 
         rename = new JButton();
         addButtonItem(rename, "src/main/resources/images/rename32.png", 6);
+        rename.addActionListener(new TabHomeRenameListener(frame, directoryFile,panelTree,displayUsers));
 
         createDirectory = new JButton();
         addButtonItem(createDirectory, "src/main/resources/images/Folder.png", 7);
-        createDirectory.addActionListener(homeListener);
+        createDirectory.addActionListener(new TabHomeAddListener(frame, directoryFile,panelTree,displayUsers));
 
         copyLabel = new JLabel();
         addButtonLabel(copyLabel,"Копировать",0);
