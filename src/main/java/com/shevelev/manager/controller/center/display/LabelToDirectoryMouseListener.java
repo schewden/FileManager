@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -29,6 +30,7 @@ public class LabelToDirectoryMouseListener implements MouseListener {
     }
 
     public void mouseClicked(MouseEvent e) {
+        directoryFile.setSelectedFile(null);
         label = (JLabel) e.getSource();
         String labelFileName = label.getText();
         if (allotmentLabel[0] == null){
@@ -40,13 +42,10 @@ public class LabelToDirectoryMouseListener implements MouseListener {
             label.setBorder(BorderFactory.createLineBorder(Color.black));
         }
         if (e.getClickCount() == 1) {
-            //List<File> fileList = Arrays.asList(directoryFile.getDirectoryFile().listFiles());
-            List<File> fileList = new ArrayList<File>();
-            fileList.addAll(directoryFile.getDirectoryFileList());
+            List<File> fileList = Arrays.asList(directoryFile.getDirectoryFile().listFiles());
             for (int i = 0; i < fileList.size(); i++) {
                 String fileNameInList = fileList.get(i).getName();
                 if (fileNameInList.equals(labelFileName)) {
-                    System.out.println(fileList.get(i).getAbsoluteFile());
                     directoryFile.setSelectedFile(fileList.get(i).getAbsoluteFile());
                 }
             }
@@ -59,15 +58,12 @@ public class LabelToDirectoryMouseListener implements MouseListener {
                 for (int i = 0; i<directoryList.size();i++) {
                     String directoryNameInList = directoryList.get(i).getName();
                     if (directoryNameInList.equals(labelFileName)) {
-                        //directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
-
                         currentPath = panelDisplayDirectory.getPanelTree().interactionPanelAndTree(directoryList.get(i).getAbsoluteFile());
                         panelDisplayDirectory.getPanelTree().getTreeDirectory().setSelectionPath(currentPath);
                         panelDisplayDirectory.getPanelTree().getTreeDirectory().expandPath(currentPath);
                         panelDisplayDirectory.getPanelTree().getTreeDirectory().scrollPathToVisible(currentPath);
-                        directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
-                        //System.out.println(currentPath.getLastPathComponent());
 
+                        directoryFile.setDirectoryFile(directoryList.get(i).getAbsoluteFile());
                         displayUsers.repaintGUI();
                     }
                 }

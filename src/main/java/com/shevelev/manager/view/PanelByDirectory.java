@@ -45,6 +45,10 @@ public class PanelByDirectory {
         panel.add(buttonSearch,new GridBagConstraints(10,0,1,1,0,0,GridBagConstraints.NORTH,GridBagConstraints.NONE,new Insets(2,0,2,2),0,0));
     }
 
+    public JTextField getAddressBar() {
+        return addressBar;
+    }
+
     private void addButtonItem(JButton newButton, String pathButtonIcon){
         newButton.setPreferredSize(new Dimension(34,29));
         newButton.setIcon(new ImageIcon(pathButtonIcon));

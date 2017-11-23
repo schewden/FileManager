@@ -1,10 +1,9 @@
 package com.shevelev.manager.view.menu;
 
-import com.shevelev.manager.controller.tab.TabHomeAddListener;
-import com.shevelev.manager.controller.tab.TabHomeDeleteListener;
-import com.shevelev.manager.controller.tab.TabHomeRenameListener;
+import com.shevelev.manager.controller.tab.*;
 import com.shevelev.manager.model.DirectoryFile;
 import com.shevelev.manager.view.DisplayUsers;
+import com.shevelev.manager.view.PanelByDirectory;
 import com.shevelev.manager.view.PanelTree;
 
 import javax.swing.*;
@@ -38,25 +37,30 @@ public class TabHomePanel {
     /**
      * Constructor
      */
-    public TabHomePanel(JFrame frame, DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers) {
+    public TabHomePanel(JFrame frame, DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
         font = new Font("Times New Roman", Font.ITALIC, 11);
+
         copy = new JButton();
         addButtonItem(copy, "src/main/resources/images/copy.png", 0);
+        copy.addActionListener(new TabHomeCopyListener(directoryFile,panelTree));
 
         insert = new JButton();
         addButtonItem(insert, "src/main/resources/images/documents32.png", 1);
+        insert.addActionListener(new TabHomeInsertListener(directoryFile,panelByDirectory,panelTree,displayUsers));
 
         insertTag = new JButton();
         addButtonItem(insertTag, "src/main/resources/images/import32.png", 2);
 
         cut = new JButton();
         addButtonItem(cut, "src/main/resources/images/cut.png", 3);
+        cut.addActionListener(new TabHomeCutListener(directoryFile,panelTree,displayUsers));
 
         copyPath = new JButton();
         addButtonItem(copyPath, "src/main/resources/images/paper-plane.png", 4);
+        copyPath.addActionListener(new TabHomeCopyPathListener(directoryFile,panelTree));
 
         delete = new JButton();
         addButtonItem(delete, "src/main/resources/images/del.png", 5);

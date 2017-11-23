@@ -14,6 +14,24 @@ public class DirectoryFile {
     private List<File> directoryList;
     private List<File> fileList;
     private List<File> directoryFileList;
+    private Object repositoryCurrentTreePath;
+    private boolean cutFileDir;
+
+    public boolean isCutFileDir() {
+        return cutFileDir;
+    }
+
+    public void setCutFileDir(boolean cutFileDir) {
+        this.cutFileDir = cutFileDir;
+    }
+
+    public Object getRepositoryCurrentTreePath() {
+        return repositoryCurrentTreePath;
+    }
+
+    public void setRepositoryCurrentTreePath(Object repositoryCurrentTreePath) {
+        this.repositoryCurrentTreePath = repositoryCurrentTreePath;
+    }
 
     public File getSelectedFile() {
         return selectedFile;

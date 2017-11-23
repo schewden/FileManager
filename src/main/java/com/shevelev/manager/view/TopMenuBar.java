@@ -20,11 +20,11 @@ public class TopMenuBar {
     private TabHomePanel tabHomePanel;
     private TabViewPanel tabViewPanel;
 
-    public TopMenuBar(JFrame frame, JPanel panelMenu, DirectoryFile directoryFile,PanelTree panelTree, DisplayUsers displayUsers){
+    public TopMenuBar(JFrame frame, JPanel panelMenu, DirectoryFile directoryFile,PanelTree panelTree, DisplayUsers displayUsers,PanelByDirectory panelByDirectory){
         panelMenu.setLayout(new BorderLayout());
         Font font = new Font("Times New Roman", Font.ITALIC, 14);
         tabbedPane = new JTabbedPane();
-        tabHomePanel = new TabHomePanel(frame,directoryFile,panelTree,displayUsers);
+        tabHomePanel = new TabHomePanel(frame,directoryFile,panelTree,displayUsers,panelByDirectory);
         tabViewPanel = new TabViewPanel();
         menuBar = new JMenuBar();
 

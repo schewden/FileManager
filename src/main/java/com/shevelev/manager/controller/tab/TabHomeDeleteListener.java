@@ -3,6 +3,7 @@ package com.shevelev.manager.controller.tab;
 import com.shevelev.manager.model.DirectoryFile;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
+import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -10,8 +11,7 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Created by denis on 19.11.17.
@@ -38,36 +38,37 @@ public class TabHomeDeleteListener implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         currentSelectedFile = directoryFile.getSelectedFile();
+        if (currentSelectedFile != null) {
+            try {
+                if (currentSelectedFile.isDirectory()) {
+                    FileUtils.deleteDirectory(currentSelectedFile);
+                    deletedFile = true;
+                } else {
+                    FileUtils.deleteQuietly(currentSelectedFile);
+                    deletedFile = false;
+                }
+                if (deletedFile) {
+                    TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
+                    //DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
+                    TreePath parentPath = panelTree.interactionPanelAndTree(directoryFile.getDirectoryFile());
+                    DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
+                    panelTree.removeNodeFromJTree(currentPath,currentNode,panelTree.getDefaultTreeModel());
+                    //panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
+                    directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
 
-        deletedFile = deleteDir(currentSelectedFile);
-        if (deletedFile){
-            TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
-            DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
-
-            panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
-
-            directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-
-            displayUsers.repaintGUI();
-        }else {
-            directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-            displayUsers.repaintGUI();
-        }
-
-    }
-
-    private boolean deleteDir(File currentSelectedFile){
-        if (currentSelectedFile.isDirectory()) {
-            List<File> listCurrentSelectedFile = Arrays.asList(currentSelectedFile.listFiles());
-            for (File aListCurrentSelectedFile : listCurrentSelectedFile) {
-                deleteDir(aListCurrentSelectedFile);
+                    displayUsers.repaintGUI();
+                } else {
+                    directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
+                    displayUsers.repaintGUI();
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-        }else {
-            currentSelectedFile.delete();
-            return false;
+        } else {
+            String msg = "Вы не выбрали файл.Пожалуйста, выберите файл и повторите действия!";
+            ErrorMessage errorMessage = new ErrorMessage(frame);
+            errorMessage.errorMessagePane(msg, "Ошибка удаления файла");
         }
-        return currentSelectedFile.delete();
+
     }
-
-
 }

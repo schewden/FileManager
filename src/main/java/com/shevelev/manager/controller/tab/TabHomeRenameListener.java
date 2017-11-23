@@ -36,43 +36,56 @@ public class TabHomeRenameListener implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         currentSelectedFile = directoryFile.getSelectedFile();
+        if (currentSelectedFile != null) {
+            RenamePanel renamePanel = new RenamePanel();
+            UIManager.put("OptionPane.yesButtonText", "Переименовать");
+            UIManager.put("OptionPane.noButtonText", "Отмена");
 
-        RenamePanel renamePanel = new RenamePanel();
-        UIManager.put("OptionPane.yesButtonText", "Переименовать");
-        UIManager.put("OptionPane.noButtonText", "Отмена");
+            int result = JOptionPane.showConfirmDialog(frame,
+                    renamePanel.getRenamePanel(),
+                    "Переименовать",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                try {
+                    if (!renamePanel.getName().getText().equals("")) {
+                        File newFile = new File(currentSelectedFile.getParent(), renamePanel.getName().getText());
+                        renameObject = currentSelectedFile.renameTo(newFile);
+                        if (renameObject) {
+                            if (newFile.isDirectory()) {
+                                TreePath parentPath = panelTree.interactionPanelAndTree(currentSelectedFile.getParentFile());
+                                DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 
-        int result = JOptionPane.showConfirmDialog(frame,
-                renamePanel.getRenamePanel(),
-                "Переименовать",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-        if (result == JOptionPane.YES_OPTION){
-            try{
-                File newFile = new File(currentSelectedFile.getParent(),renamePanel.getName().getText());
-                renameObject = currentSelectedFile.renameTo(newFile);
-                if (renameObject){
-                    if (newFile.isDirectory()){
-                        TreePath parentPath = panelTree.interactionPanelAndTree(currentSelectedFile.getParentFile());
-                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
+                                TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
+                                DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
 
-                        TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
-                        DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
+                                panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
 
-                        panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
+                                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
+                                panelTree.getDefaultTreeModel().insertNodeInto(newNode, parentNode, parentNode.getChildCount());
 
-                        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
-                        panelTree.getDefaultTreeModel().insertNodeInto(newNode,parentNode,parentNode.getChildCount());
-
-                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                        displayUsers.repaintGUI();
-                    }else {
-                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                        displayUsers.repaintGUI();
+                                directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
+                                displayUsers.repaintGUI();
+                                directoryFile.setSelectedFile(null);
+                            } else {
+                                directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
+                                displayUsers.repaintGUI();
+                                directoryFile.setSelectedFile(null);
+                            }
+                        }
+                    } else {
+                        String msg = "Вы не ввели имя файла.Пожалуйста,введите имя файла!";
+                        ErrorMessage errorMessage = new ErrorMessage(frame);
+                        errorMessage.errorMessagePane(msg, "Ошибка изменения имени файла");
                     }
+                } catch (Throwable t) {
+                    t.printStackTrace();
                 }
-            }catch (Throwable t) {
-                t.printStackTrace();
             }
+        } else {
+            String msg = "Вы не выбрали файл.Пожалуйста, выберите файл и повторите действия!";
+            ErrorMessage errorMessage = new ErrorMessage(frame);
+            errorMessage.errorMessagePane(msg, "Ошибка изменения имени файла");
         }
     }
 }

@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.io.File;
+import java.util.*;
 
 /**
  * Created by denis on 29.10.17.
@@ -37,7 +38,6 @@ public class PanelTree {
 
         panelDisplayDirectory.setPanelTree(this);
         panelTree.add(scrollPane);
-        System.out.println(treeDirectory.getRowCount());
     }
 
     public void initialSystemFiles(DefaultMutableTreeNode root){
@@ -70,5 +70,26 @@ public class PanelTree {
             }
         }
         return null;
+    }
+
+    public void removeNodeFromJTree(TreePath srcTreePath,DefaultMutableTreeNode srcParentNode, DefaultTreeModel defaultTreeModel) {
+        DefaultMutableTreeNode srcNode = (DefaultMutableTreeNode) srcTreePath.getLastPathComponent();
+        if (!srcNode.equals(srcParentNode)) {
+            defaultTreeModel.removeNodeFromParent(srcNode);
+            removeNodeFromJTree(srcTreePath.getParentPath(),srcParentNode, defaultTreeModel);
+        }
+    }
+
+    public void insertNodeIntoJTree(TreePath destTreePath, DefaultTreeModel defaultTreeModel, String nameNewNode){
+        DefaultMutableTreeNode destParentNode = (DefaultMutableTreeNode) destTreePath.getLastPathComponent();
+        File destCurrentNodeFile = (File) destParentNode.getUserObject();
+        java.util.List<File> listFilesInNewNode = Arrays.asList(destCurrentNodeFile.listFiles());
+        for (int i = 0; i < listFilesInNewNode.size(); i++) {
+            if (listFilesInNewNode.get(i).getName().equals(nameNewNode)) {
+                File nF = listFilesInNewNode.get(i);
+                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(nF);
+                defaultTreeModel.insertNodeInto(newNode, destParentNode, destParentNode.getChildCount());
+            }
+        }
     }
 }

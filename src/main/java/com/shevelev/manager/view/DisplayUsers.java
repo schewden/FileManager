@@ -37,20 +37,20 @@ public class DisplayUsers {
 
         panelCenter = new JPanel();
         frame.add(panelCenter, BorderLayout.CENTER);
-        ///new PanelTable(panelCenter);
         panelDisplayDirectory = new PanelDisplayDirectory(panelCenter, directoryFile,this);
 
         panelTree = new JPanel();
         frame.add(panelTree,BorderLayout.WEST);
         panelTreeClass = new PanelTree(panelDisplayDirectory, panelTree, directoryFile,this);
 
+        panelDirectory = new JPanel();
+        PanelByDirectory panelByDirectory = new PanelByDirectory(panelDirectory);
+
         panelMenu = new JPanel();
         frame.add(panelMenu,BorderLayout.NORTH);
-        new TopMenuBar(frame,panelMenu,directoryFile,panelTreeClass,this);
+        new TopMenuBar(frame,panelMenu,directoryFile,panelTreeClass,this,panelByDirectory);
 
-        panelDirectory = new JPanel();
         panelMenu.add(panelDirectory,BorderLayout.SOUTH );
-        new PanelByDirectory(panelDirectory);
 
         frame.pack();
         frame.setLocationRelativeTo(null);

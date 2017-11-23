@@ -15,5 +15,6 @@
     <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-awt:RELEASE701" level="project" />
     <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-filesystems:RELEASE701" level="project" />
     <orderEntry type="library" name="Maven: org.netbeans.api:org-openide-util-lookup:RELEASE70" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
   </component>
 </module>

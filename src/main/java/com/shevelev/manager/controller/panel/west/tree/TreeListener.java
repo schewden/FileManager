@@ -34,12 +34,12 @@ public class TreeListener  implements TreeSelectionListener {
         TreePath currentNodePath = panelTree.interactionPanelAndTree((File)node.getUserObject());
         if (panelTree.getTreeDirectory().isExpanded(currentNodePath)){
             directoryFile.setDirectoryFile((File)node.getUserObject());
-
+            //directoryFile.setRepositoryCurrentTreePath(node.getUserObject());
             displayUsers.repaintGUI();
         }else {
             treeFileManager.createChild(node);
             directoryFile.setDirectoryFile((File)node.getUserObject());
-
+            //directoryFile.setRepositoryCurrentTreePath(node.getUserObject());
             displayUsers.repaintGUI();
         }
     }
