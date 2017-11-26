@@ -1,6 +1,7 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.PanelTree;
 
 import javax.swing.tree.TreePath;
@@ -14,19 +15,21 @@ import java.io.File;
 public class TabHomeCopyListener implements ActionListener{
     private File currentSelectedFile;
     private TreePath currentTreePath;
-    private DirectoryFile directoryFile;
+    private FileToDirectoryModel FileToDirectoryModel;
     private PanelTree panelTree;
+    private CutModel cutModel;
 
-    public TabHomeCopyListener(DirectoryFile directoryFile, PanelTree panelTree){
-        this.directoryFile = directoryFile;
+    public TabHomeCopyListener(FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, CutModel cutModel){
+        this.FileToDirectoryModel = FileToDirectoryModel;
         this.panelTree = panelTree;
+        this.cutModel = cutModel;
 
     }
     public void actionPerformed(ActionEvent e) {
-        currentSelectedFile = directoryFile.getSelectedFile();
+        currentSelectedFile = FileToDirectoryModel.getSelectedDirectory();
         if (currentSelectedFile != null){
-            directoryFile.setRepositoryCurrentTreePath(currentSelectedFile);
-            directoryFile.setCutFileDir(false);
+            cutModel.setStorageCurrentTreePath(currentSelectedFile);
+            cutModel.setMarkCutFileOrDir(false);
         }
     }
 }

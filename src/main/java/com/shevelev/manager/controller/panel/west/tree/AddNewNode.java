@@ -1,13 +1,10 @@
 package com.shevelev.manager.controller.panel.west.tree;
 
-
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 
-/**
- * Created by denis on 21.10.17.
- */
-public class TreeFileManager {
+
+public class AddNewNode {
 
     public void createChild(DefaultMutableTreeNode node){
         File currentFile = (File) node.getUserObject();

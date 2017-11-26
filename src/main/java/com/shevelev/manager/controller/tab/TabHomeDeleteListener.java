@@ -1,6 +1,6 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 import org.apache.commons.io.FileUtils;
@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public class TabHomeDeleteListener implements ActionListener {
     private JFrame frame;
-    private DirectoryFile directoryFile;
+    private FileToDirectoryModel FileToDirectoryModel;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
 
@@ -26,18 +26,18 @@ public class TabHomeDeleteListener implements ActionListener {
     private boolean deletedFile;
 
 
-    public TabHomeDeleteListener(JFrame frame, DirectoryFile directoryFile,
+    public TabHomeDeleteListener(JFrame frame, FileToDirectoryModel FileToDirectoryModel,
                                  PanelTree panelTree,
                                  DisplayUsers displayUsers) {
         this.frame = frame;
-        this.directoryFile = directoryFile;
+        this.FileToDirectoryModel = FileToDirectoryModel;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
     }
 
 
     public void actionPerformed(ActionEvent e) {
-        currentSelectedFile = directoryFile.getSelectedFile();
+        currentSelectedFile = FileToDirectoryModel.getSelectedDirectory();
         if (currentSelectedFile != null) {
             try {
                 if (currentSelectedFile.isDirectory()) {
@@ -48,18 +48,18 @@ public class TabHomeDeleteListener implements ActionListener {
                     deletedFile = false;
                 }
                 if (deletedFile) {
-                    TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
+                    TreePath currentPath = panelTree.getTreePathInJTree(currentSelectedFile);
                     //DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
-                    TreePath parentPath = panelTree.interactionPanelAndTree(directoryFile.getDirectoryFile());
+                    TreePath parentPath = panelTree.getTreePathInJTree(FileToDirectoryModel.getFileToDirectory());
                     DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
                     panelTree.removeNodeFromJTree(currentPath,currentNode,panelTree.getDefaultTreeModel());
                     //panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
-                    directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
+                    FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
 
-                    displayUsers.repaintGUI();
+                    displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
                 } else {
-                    directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                    displayUsers.repaintGUI();
+                    FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
+                    displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();

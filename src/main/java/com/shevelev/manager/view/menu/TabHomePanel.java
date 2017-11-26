@@ -1,10 +1,12 @@
 package com.shevelev.manager.view.menu;
 
 import com.shevelev.manager.controller.tab.*;
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelByDirectory;
 import com.shevelev.manager.view.PanelTree;
+import org.openide.awt.DropDownButtonFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +16,13 @@ import java.awt.*;
  */
 public class TabHomePanel {
     private JPanel panel;
-    private JButton copy;
     private JButton insert;
     private JButton cut;
     private JButton copyPath;
     private JButton delete;
     private JButton rename;
     private JButton createDirectory;
-    private JButton insertTag;
+    private JButton dropDownButton;
 
     private JLabel copyLabel;
     private JLabel insertLabel;
@@ -30,49 +31,58 @@ public class TabHomePanel {
     private JLabel deleteLabel;
     private JLabel renameLabel;
     private JLabel createDirectoryLabel;
-    private JLabel insertTagLabel;
+    private JLabel dropDownButtonLabel;
+
+    private JToolBar toolbarDropDown;
+    private JPopupMenu popupMenuButton;
+    private JMenuItem sortingName;
+    private JMenuItem sortingType;
+    private JMenuItem sortingDate;
+    private JMenuItem sortingSize;
 
     private Font font;
 
     /**
      * Constructor
      */
-    public TabHomePanel(JFrame frame, DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory) {
+    public TabHomePanel(JFrame frame, FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, CutModel cutModel) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
         font = new Font("Times New Roman", Font.ITALIC, 11);
 
-        copy = new JButton();
+        JButton copy = new JButton();
         addButtonItem(copy, "src/main/resources/images/copy.png", 0);
-        copy.addActionListener(new TabHomeCopyListener(directoryFile,panelTree));
+        copy.addActionListener(new TabHomeCopyListener(FileToDirectoryModel,panelTree,cutModel));
 
         insert = new JButton();
         addButtonItem(insert, "src/main/resources/images/documents32.png", 1);
-        insert.addActionListener(new TabHomeInsertListener(directoryFile,panelByDirectory,panelTree,displayUsers));
-
-        insertTag = new JButton();
-        addButtonItem(insertTag, "src/main/resources/images/import32.png", 2);
+        insert.addActionListener(new TabHomeInsertListener(FileToDirectoryModel,panelByDirectory,panelTree,displayUsers,cutModel));
 
         cut = new JButton();
-        addButtonItem(cut, "src/main/resources/images/cut.png", 3);
-        cut.addActionListener(new TabHomeCutListener(directoryFile,panelTree,displayUsers));
+        addButtonItem(cut, "src/main/resources/images/cut.png", 2);
+        cut.addActionListener(new TabHomeCutListener(FileToDirectoryModel,panelTree,displayUsers,cutModel));
 
         copyPath = new JButton();
-        addButtonItem(copyPath, "src/main/resources/images/paper-plane.png", 4);
-        copyPath.addActionListener(new TabHomeCopyPathListener(directoryFile,panelTree));
+        addButtonItem(copyPath, "src/main/resources/images/paper-plane.png", 3);
+        copyPath.addActionListener(new TabHomeCopyPathListener(FileToDirectoryModel,panelTree,cutModel));
 
         delete = new JButton();
-        addButtonItem(delete, "src/main/resources/images/del.png", 5);
-        delete.addActionListener(new TabHomeDeleteListener(frame, directoryFile,panelTree,displayUsers));
+        addButtonItem(delete, "src/main/resources/images/del.png", 4);
+        delete.addActionListener(new TabHomeDeleteListener(frame, FileToDirectoryModel,panelTree,displayUsers));
 
         rename = new JButton();
-        addButtonItem(rename, "src/main/resources/images/rename32.png", 6);
-        rename.addActionListener(new TabHomeRenameListener(frame, directoryFile,panelTree,displayUsers));
+        addButtonItem(rename, "src/main/resources/images/rename32.png", 5);
+        rename.addActionListener(new TabHomeRenameListener(frame, FileToDirectoryModel,panelTree,displayUsers));
 
         createDirectory = new JButton();
-        addButtonItem(createDirectory, "src/main/resources/images/Folder.png", 7);
-        createDirectory.addActionListener(new TabHomeAddListener(frame, directoryFile,panelTree,displayUsers));
+        addButtonItem(createDirectory, "src/main/resources/images/Folder.png", 6);
+        createDirectory.addActionListener(new TabHomeAddListener(frame, FileToDirectoryModel,panelTree,displayUsers));
+
+
+        toolbarDropDown = new JToolBar();
+        addDropDownButton(toolbarDropDown);
+
 
         copyLabel = new JLabel();
         addButtonLabel(copyLabel,"Копировать",0);
@@ -80,23 +90,24 @@ public class TabHomePanel {
         insertLabel = new JLabel();
         addButtonLabel(insertLabel,"Вставить",1);
 
-        insertTagLabel = new JLabel();
-        addButtonLabel(insertTagLabel,"Вставить ярлык",2);
-
         cutLabel = new JLabel();
-        addButtonLabel(cutLabel,"Вырезать",3);
+        addButtonLabel(cutLabel,"Вырезать",2);
 
         copyPathLabel = new JLabel();
-        addButtonLabel(copyPathLabel,"Скопировать путь",4);
+        addButtonLabel(copyPathLabel,"Скопировать путь",3);
 
         deleteLabel = new JLabel();
-        addButtonLabel(deleteLabel,"Удалить",5);
+        addButtonLabel(deleteLabel,"Удалить",4);
 
         renameLabel = new JLabel();
-        addButtonLabel(renameLabel,"Переименовать",6);
+        addButtonLabel(renameLabel,"Переименовать",5);
 
         createDirectoryLabel = new JLabel();
-        addButtonLabel(createDirectoryLabel,"Создать папку",7);
+        addButtonLabel(createDirectoryLabel,"Создать папку",6);
+
+        dropDownButtonLabel = new JLabel();
+        addButtonLabel(dropDownButtonLabel,"Сортировать",7);
+
     }
 
     /***
@@ -131,4 +142,33 @@ public class TabHomePanel {
         panel.add(newLabel,new GridBagConstraints(gridx,1,1,1,1,1,GridBagConstraints.CENTER,GridBagConstraints.NONE,new Insets(0,2,2,2),0,0));
     }
 
+    /**
+     * The procedure for creating a drop-down button
+     * @param newToolBar new JToolBar
+     */
+    private void addDropDownButton(JToolBar newToolBar){
+        newToolBar.setFloatable(false);
+        popupMenuButton = new JPopupMenu();
+        dropDownButton = DropDownButtonFactory.createDropDownButton(new ImageIcon("src/main/resources/images/sortascend32.png"), popupMenuButton);
+        addMenuItem(popupMenuButton,sortingName,"Имя");
+        addMenuItem(popupMenuButton,sortingType,"Тип");
+        addMenuItem(popupMenuButton,sortingDate,"Дата создания");
+        addMenuItem(popupMenuButton,sortingSize,"Размер");
+        newToolBar.add(dropDownButton);
+        panel.add(newToolBar,new GridBagConstraints(7,0,1,1,0,0,GridBagConstraints.NORTH,GridBagConstraints.NONE,new Insets(2,2,0,2),0,0));
+
+    }
+
+    /**
+     * The procedure for creating a button
+     * @param menuHead - component
+     * @param menuItem - menu item
+     * @param nameMenu - menu item name
+     */
+    private void addMenuItem(JComponent menuHead, JMenuItem menuItem, String nameMenu){
+        menuItem = new JMenuItem();
+        menuItem.setText(nameMenu);
+        menuHead.add(menuItem);
+        menuItem.setFont(font);
+    }
 }

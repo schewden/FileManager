@@ -1,6 +1,7 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 
@@ -12,24 +13,26 @@ import java.io.File;
  * Created by denis on 22.11.17.
  */
 public class TabHomeCutListener implements ActionListener {
-    private DirectoryFile directoryFile;
+    private FileToDirectoryModel FileToDirectoryModel;
     private File currentSelectedFile;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
+    private CutModel cutModel;
 
-    public TabHomeCutListener(DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers) {
-        this.directoryFile = directoryFile;
+    public TabHomeCutListener(FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, CutModel cutModel) {
+        this.FileToDirectoryModel = FileToDirectoryModel;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
+        this.cutModel = cutModel;
     }
     public void actionPerformed(ActionEvent e) {
-            File srcDir = directoryFile.getSelectedFile();
+            File srcDir = FileToDirectoryModel.getSelectedDirectory();
             if (srcDir.isDirectory()) {
-                directoryFile.setCutFileDir(true);
-                directoryFile.setRepositoryCurrentTreePath(srcDir);
+                cutModel.setMarkCutFileOrDir(true);
+                cutModel.setStorageCurrentTreePath(srcDir);
             } else {
-                directoryFile.setCutFileDir(true);
-                directoryFile.setRepositoryCurrentTreePath(srcDir);
+                cutModel.setMarkCutFileOrDir(true);
+                cutModel.setStorageCurrentTreePath(srcDir);
             }
         }
 }

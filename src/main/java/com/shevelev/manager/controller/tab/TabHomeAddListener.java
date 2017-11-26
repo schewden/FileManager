@@ -1,6 +1,6 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 import com.shevelev.manager.view.menu.NewFilePanel;
@@ -18,13 +18,13 @@ import java.io.File;
 public class TabHomeAddListener implements ActionListener {
     private boolean createdObject;
     private JFrame frame;
-    private DirectoryFile directoryFile;
+    private FileToDirectoryModel FileToDirectoryModel;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
 
-    public TabHomeAddListener(JFrame frame, DirectoryFile directoryFile, PanelTree panelTree, DisplayUsers displayUsers) {
+    public TabHomeAddListener(JFrame frame, FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers) {
         this.frame = frame;
-        this.directoryFile = directoryFile;
+        this.FileToDirectoryModel = FileToDirectoryModel;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
     }
@@ -42,7 +42,7 @@ public class TabHomeAddListener implements ActionListener {
         if (result == JOptionPane.YES_OPTION) {
             try {
                 if (!newFilePanel.getName().getText().equals("")) {
-                    File parentFile = directoryFile.getDirectoryFile();
+                    File parentFile = FileToDirectoryModel.getFileToDirectory();
                     File newFile = new File(parentFile, newFilePanel.getName().getText());
                     if (newFilePanel.getNewTypeDirectory().isSelected()) {
                         createdObject = newFile.mkdir();
@@ -50,17 +50,17 @@ public class TabHomeAddListener implements ActionListener {
                         createdObject = newFile.createNewFile();
                     }
                     if (createdObject) {
-                        TreePath treePath = panelTree.interactionPanelAndTree(parentFile);
+                        FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
+                        TreePath treePath = panelTree.getTreePathInJTree(parentFile);
                         DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) treePath.getLastPathComponent();
                         if (newFile.isDirectory()) {
                             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
-
                             panelTree.getDefaultTreeModel().insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+                            panelTree.getTreeDirectory().expandPath(treePath);
+
                         }
 
-                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-
-                        displayUsers.repaintGUI();
+                        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
                     }
                 } else {
                     String msg = "Вы не ввели имя файла.Пожалуйста,введите имя файла!";

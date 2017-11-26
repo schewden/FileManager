@@ -1,6 +1,7 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelByDirectory;
 import com.shevelev.manager.view.PanelTree;
@@ -17,37 +18,41 @@ import java.io.IOException;
  * Created by denis on 21.11.17.
  */
 public class TabHomeInsertListener implements ActionListener {
-    private DirectoryFile directoryFile;
+    private FileToDirectoryModel FileToDirectoryModel;
     private Object currentTreePath;
     private PanelByDirectory panelByDirectory;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
+    private CutModel cutModel;
 
     private File destDir;
     private File srcDir;
     private boolean success = false;
 
-    public TabHomeInsertListener(DirectoryFile directoryFile, PanelByDirectory panelByDirectory, PanelTree panelTree, DisplayUsers displayUsers) {
-        this.directoryFile = directoryFile;
+    public TabHomeInsertListener(FileToDirectoryModel FileToDirectoryModel, PanelByDirectory panelByDirectory,
+                                 PanelTree panelTree, DisplayUsers displayUsers,
+                                 CutModel cutModel) {
+        this.FileToDirectoryModel = FileToDirectoryModel;
         this.panelByDirectory = panelByDirectory;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
+        this.cutModel =cutModel;
     }
 
     public void actionPerformed(ActionEvent e) {
-        currentTreePath = directoryFile.getRepositoryCurrentTreePath();
+        currentTreePath = cutModel.getStorageCurrentTreePath();
         if (currentTreePath instanceof String) {
             String name = currentTreePath.toString();
             panelByDirectory.getAddressBar().setText(name);
         } else {
             try {
-                destDir = directoryFile.getDirectoryFile();
+                destDir = FileToDirectoryModel.getFileToDirectory();
                 srcDir = (File) currentTreePath;
                 if (srcDir.isDirectory()) {
                     String nameSrcDir = srcDir.getName();
-                    TreePath srcTreePath = panelTree.interactionPanelAndTree(srcDir);
+                    TreePath srcTreePath = panelTree.getTreePathInJTree(srcDir);
                     DefaultMutableTreeNode srcParentNode = (DefaultMutableTreeNode) srcTreePath.getParentPath().getLastPathComponent();
-                    if (!directoryFile.isCutFileDir()) {
+                    if (!cutModel.isMarkCutFileOrDir()) {
                         FileUtils.copyDirectoryToDirectory(srcDir, destDir);
                         success = true;
                     } else {
@@ -55,9 +60,9 @@ public class TabHomeInsertListener implements ActionListener {
                         success = true;
                     }
                     if (success) {
-                        File destFile = directoryFile.getDirectoryFile();
-                        TreePath destTreePath = panelTree.interactionPanelAndTree(destFile);
-                        if (!directoryFile.isCutFileDir()) {
+                        File destFile = FileToDirectoryModel.getFileToDirectory();
+                        TreePath destTreePath = panelTree.getTreePathInJTree(destFile);
+                        if (!cutModel.isMarkCutFileOrDir()) {
                             DefaultMutableTreeNode parentDest = (DefaultMutableTreeNode) destTreePath.getLastPathComponent();
                             DefaultMutableTreeNode srcNewNode = new DefaultMutableTreeNode(srcDir);
                             panelTree.getDefaultTreeModel().insertNodeInto(srcNewNode, parentDest, parentDest.getChildCount());
@@ -65,11 +70,11 @@ public class TabHomeInsertListener implements ActionListener {
                             panelTree.removeNodeFromJTree(srcTreePath, srcParentNode, panelTree.getDefaultTreeModel());
                             panelTree.insertNodeIntoJTree(destTreePath, panelTree.getDefaultTreeModel(), nameSrcDir);
                         }
-                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                        displayUsers.repaintGUI();
+                        FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
+                        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
                     }
                 } else {
-                    if (!directoryFile.isCutFileDir()) {
+                    if (!cutModel.isMarkCutFileOrDir()) {
                         FileUtils.copyFileToDirectory(srcDir, destDir);
                         success = true;
                     } else {
@@ -77,8 +82,8 @@ public class TabHomeInsertListener implements ActionListener {
                         success = true;
                     }
                     if (success) {
-                        directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                        displayUsers.repaintGUI();
+                        FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
+                        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
                     }
                 }
             } catch (IOException e1) {

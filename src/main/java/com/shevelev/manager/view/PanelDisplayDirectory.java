@@ -1,7 +1,8 @@
 package com.shevelev.manager.view;
 
-import com.shevelev.manager.controller.center.display.LabelToDirectoryMouseListener;
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.controller.center.display.badgeInDirectoryMouseListener;
+import com.shevelev.manager.model.BackAndNextModel;
+import com.shevelev.manager.model.FileToDirectoryModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,32 +16,35 @@ import java.util.List;
 public class PanelDisplayDirectory {
     private final String ICON_DIRECTORY = "src/main/resources/images/Folder.png";
     private final String ICON_FILE = "src/main/resources/images/documents32.png";
-    private final Dimension DIMENSION_LABEL = new Dimension(106,32);
+    private final Dimension DIMENSION_LABEL = new Dimension(106, 32);
+    private final Dimension DIMENSION_SCROLL_PANE = new Dimension(580, 390);
 
     private JPanel panelInPanelCenter;
     private JScrollPane scrollPane;
-    private JLabel labelFile;
-    private LabelToDirectoryMouseListener mouseListener;
-    private DirectoryFile directoryFile;
+    private JLabel badgeFile;
     private JPanel panelCenter;
-    private PanelTree panelTree;
 
-    public PanelDisplayDirectory(JPanel panelCenter, DirectoryFile directoryFile,DisplayUsers displayUsers){
+    private FileToDirectoryModel FileToDirectoryModel;
+    private DisplayUsers displayUsers;
+    private PanelTree panelTree;
+    private BackAndNextModel backAndNextModel;
+    private badgeInDirectoryMouseListener badgeInDirectoryMouseListener;
+
+
+    public PanelDisplayDirectory(JPanel panelCenter, FileToDirectoryModel FileToDirectoryModel,
+                                 DisplayUsers displayUsers, BackAndNextModel backAndNextModel) {
         this.panelCenter = panelCenter;
-        this.directoryFile = directoryFile;
+        this.FileToDirectoryModel = FileToDirectoryModel;
+        this.displayUsers = displayUsers;
+        this.backAndNextModel = backAndNextModel;
 
         panelInPanelCenter = new JPanel();
         panelInPanelCenter.setBackground(Color.WHITE);
-        panelInPanelCenter.setPreferredSize(new Dimension(580,1000));
-        panelInPanelCenter.setLayout(new FlowLayout(FlowLayout.LEADING,5,5));
-        mouseListener = new LabelToDirectoryMouseListener(directoryFile, this, displayUsers);
+        panelInPanelCenter.setPreferredSize(new Dimension(580, 1000));
+        panelInPanelCenter.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 
-        addLabelInPanel();
-
-    }
-
-    public JPanel getPanelCenter() {
-        return panelCenter;
+        badgeInDirectoryMouseListener = new badgeInDirectoryMouseListener(FileToDirectoryModel, this, displayUsers, backAndNextModel);
+        updateCurrentDirectory(FileToDirectoryModel.getListFilesAndDirectories());
     }
 
     public JPanel getPanelInPanelCenter() {
@@ -55,32 +59,28 @@ public class PanelDisplayDirectory {
         this.panelTree = panelTree;
     }
 
-    public void addLabelInPanel(){
-        List<File> listCurrentFile = directoryFile.getDirectoryFileList();
-        List<File> directoryList = new ArrayList<File>();
-        List<File> fileList = new ArrayList<File>();
-
-        for (int i = 0; i<listCurrentFile.size(); i++) {
-            labelFile = new JLabel(listCurrentFile.get(i).getName());
-
-            if (listCurrentFile.get(i).isDirectory()) {
-                labelFile.setIcon(new ImageIcon(ICON_DIRECTORY));
-                directoryList.add(listCurrentFile.get(i));
-                directoryFile.setDirectoryList(directoryList);
+    public void updateCurrentDirectory(List<File> currentFiles) {
+        List<File> directoryList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
+        for (File currentFile : currentFiles) {
+            badgeFile = new JLabel(currentFile.getName());
+            if (currentFile.isDirectory()) {
+                badgeFile.setIcon(new ImageIcon(ICON_DIRECTORY));
+                directoryList.add(currentFile);
+                FileToDirectoryModel.setDirectoriesList(directoryList);
             } else {
-                fileList.add(listCurrentFile.get(i));
-                directoryFile.setFileList(fileList);
-                labelFile.setIcon(new ImageIcon(ICON_FILE));
+                fileList.add(currentFile);
+                FileToDirectoryModel.setFilesList(fileList);
+                badgeFile.setIcon(new ImageIcon(ICON_FILE));
             }
-            labelFile.setToolTipText(labelFile.getText());
-            labelFile.addMouseListener(mouseListener);
-            labelFile.setPreferredSize(DIMENSION_LABEL);
-            panelInPanelCenter.add(labelFile);
+            badgeFile.setToolTipText(badgeFile.getText());
+            badgeFile.addMouseListener(badgeInDirectoryMouseListener);
+            badgeFile.setPreferredSize(DIMENSION_LABEL);
+
+            panelInPanelCenter.add(badgeFile);
         }
-
-        scrollPane = new JScrollPane(panelInPanelCenter,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(580,390));
-
+        scrollPane = new JScrollPane(panelInPanelCenter, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(DIMENSION_SCROLL_PANE);
         panelCenter.add(scrollPane);
     }
 }

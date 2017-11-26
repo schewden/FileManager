@@ -1,6 +1,6 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.DirectoryFile;
+import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 import com.shevelev.manager.view.menu.RenamePanel;
@@ -18,24 +18,24 @@ import java.io.File;
 public class TabHomeRenameListener implements ActionListener {
 
     private JFrame frame;
-    private DirectoryFile directoryFile;
+    private FileToDirectoryModel FileToDirectoryModel;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
 
     private boolean renameObject;
     private File currentSelectedFile;
 
-    public TabHomeRenameListener(JFrame frame, DirectoryFile directoryFile,
+    public TabHomeRenameListener(JFrame frame, FileToDirectoryModel FileToDirectoryModel,
                                  PanelTree panelTree,
                                  DisplayUsers displayUsers) {
         this.frame = frame;
-        this.directoryFile = directoryFile;
+        this.FileToDirectoryModel = FileToDirectoryModel;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
     }
 
     public void actionPerformed(ActionEvent e) {
-        currentSelectedFile = directoryFile.getSelectedFile();
+        currentSelectedFile = FileToDirectoryModel.getSelectedDirectory();
         if (currentSelectedFile != null) {
             RenamePanel renamePanel = new RenamePanel();
             UIManager.put("OptionPane.yesButtonText", "Переименовать");
@@ -53,10 +53,10 @@ public class TabHomeRenameListener implements ActionListener {
                         renameObject = currentSelectedFile.renameTo(newFile);
                         if (renameObject) {
                             if (newFile.isDirectory()) {
-                                TreePath parentPath = panelTree.interactionPanelAndTree(currentSelectedFile.getParentFile());
+                                TreePath parentPath = panelTree.getTreePathInJTree(currentSelectedFile.getParentFile());
                                 DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 
-                                TreePath currentPath = panelTree.interactionPanelAndTree(currentSelectedFile);
+                                TreePath currentPath = panelTree.getTreePathInJTree(currentSelectedFile);
                                 DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
 
                                 panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
@@ -64,13 +64,13 @@ public class TabHomeRenameListener implements ActionListener {
                                 DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
                                 panelTree.getDefaultTreeModel().insertNodeInto(newNode, parentNode, parentNode.getChildCount());
 
-                                directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                                displayUsers.repaintGUI();
-                                directoryFile.setSelectedFile(null);
+                                FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
+                                displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+                                FileToDirectoryModel.setSelectedDirectory(null);
                             } else {
-                                directoryFile.setDirectoryFile(directoryFile.getDirectoryFile());
-                                displayUsers.repaintGUI();
-                                directoryFile.setSelectedFile(null);
+                                FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
+                                displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+                                FileToDirectoryModel.setSelectedDirectory(null);
                             }
                         }
                     } else {
