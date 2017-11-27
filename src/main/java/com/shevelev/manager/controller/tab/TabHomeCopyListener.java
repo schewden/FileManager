@@ -1,35 +1,50 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.CutModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
-import com.shevelev.manager.view.PanelTree;
+import com.shevelev.manager.model.InsertModel;
+import com.shevelev.manager.view.DisplayUsers;
 
-import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
- * Created by denis on 22.11.17.
+ * In this class, the copy button listener controller is implemented
  */
-public class TabHomeCopyListener implements ActionListener{
-    private File currentSelectedFile;
-    private TreePath currentTreePath;
-    private FileToDirectoryModel FileToDirectoryModel;
-    private PanelTree panelTree;
-    private CutModel cutModel;
+public class TabHomeCopyListener implements ActionListener {
+    private FileToDirectoryModel fileToDirectoryModel;
+    private InsertModel insertModel;
+    private DisplayUsers displayUsers;
 
-    public TabHomeCopyListener(FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, CutModel cutModel){
-        this.FileToDirectoryModel = FileToDirectoryModel;
-        this.panelTree = panelTree;
-        this.cutModel = cutModel;
-
+    /**
+     * Constructor
+     *
+     * @param fileToDirectoryModel - model by files (FileToDirectoryModel.java)
+     * @param insertModel          - model of inserting a directory or file (InsertModel.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     */
+    public TabHomeCopyListener(FileToDirectoryModel fileToDirectoryModel, InsertModel insertModel, DisplayUsers displayUsers) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
+        this.insertModel = insertModel;
+        this.displayUsers = displayUsers;
     }
+
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     public void actionPerformed(ActionEvent e) {
-        currentSelectedFile = FileToDirectoryModel.getSelectedDirectory();
-        if (currentSelectedFile != null){
-            cutModel.setStorageCurrentTreePath(currentSelectedFile);
-            cutModel.setMarkCutFileOrDir(false);
+        try {
+            File currentSelectedFile = fileToDirectoryModel.getSelectedDirectory();
+            if (currentSelectedFile != null) {
+                insertModel.setStorageCurrentTreePath(currentSelectedFile);
+                insertModel.setMarkCutFileOrDir(false);
+            }
+        } catch (NullPointerException npe) {
+            ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
+            String msg = "Вы не выделили элемент, который хотите скопировать!";
+            errorMessage.errorMessagePane(msg, "Ошибка копирования");
         }
     }
 }

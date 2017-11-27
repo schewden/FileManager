@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RefreshListener implements ActionListener {
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private PanelTree panelTree;
 
-    public RefreshListener(FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree){
-        this.FileToDirectoryModel = FileToDirectoryModel;
+    public RefreshListener(FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree){
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.panelTree = panelTree;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        File currentFile = FileToDirectoryModel.getFileToDirectory();
+        File currentFile = fileToDirectoryModel.getFileToDirectory();
         List<File> currentListParentFiles = new ArrayList<>();
+        panelTree.getTreeDirectory().clearSelection();
         panelTree.getDefaultTreeModel().reload();
         panelTree.getPathCurrentFileInJTree(currentFile,currentListParentFiles);
 

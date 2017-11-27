@@ -1,7 +1,7 @@
 package com.shevelev.manager.view.menu;
 
 import com.shevelev.manager.controller.tab.*;
-import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.InsertModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelByDirectory;
@@ -45,7 +45,7 @@ public class TabHomePanel {
     /**
      * Constructor
      */
-    public TabHomePanel(JFrame frame, FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, CutModel cutModel) {
+    public TabHomePanel(JFrame frame, FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, InsertModel insertModel) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
@@ -53,31 +53,32 @@ public class TabHomePanel {
 
         JButton copy = new JButton();
         addButtonItem(copy, "src/main/resources/images/copy.png", 0);
-        copy.addActionListener(new TabHomeCopyListener(FileToDirectoryModel,panelTree,cutModel));
+        copy.addActionListener(new TabHomeCopyListener(fileToDirectoryModel, insertModel, displayUsers));
 
         insert = new JButton();
         addButtonItem(insert, "src/main/resources/images/documents32.png", 1);
-        insert.addActionListener(new TabHomeInsertListener(FileToDirectoryModel,panelByDirectory,panelTree,displayUsers,cutModel));
+        insert.addActionListener(new TabHomeInsertListener(fileToDirectoryModel,panelByDirectory,panelTree,displayUsers, insertModel));
 
         cut = new JButton();
         addButtonItem(cut, "src/main/resources/images/cut.png", 2);
-        cut.addActionListener(new TabHomeCutListener(FileToDirectoryModel,panelTree,displayUsers,cutModel));
+        cut.addActionListener(new TabHomeCutListener(fileToDirectoryModel, insertModel,displayUsers));
 
         copyPath = new JButton();
         addButtonItem(copyPath, "src/main/resources/images/paper-plane.png", 3);
-        copyPath.addActionListener(new TabHomeCopyPathListener(FileToDirectoryModel,panelTree,cutModel));
+        copyPath.addActionListener(new TabHomeCopyPathListener(fileToDirectoryModel, insertModel));
 
+        /*с этого места*/
         delete = new JButton();
         addButtonItem(delete, "src/main/resources/images/del.png", 4);
-        delete.addActionListener(new TabHomeDeleteListener(frame, FileToDirectoryModel,panelTree,displayUsers));
+        delete.addActionListener(new TabHomeDeleteListener(frame, fileToDirectoryModel,panelTree,displayUsers));
 
         rename = new JButton();
         addButtonItem(rename, "src/main/resources/images/rename32.png", 5);
-        rename.addActionListener(new TabHomeRenameListener(frame, FileToDirectoryModel,panelTree,displayUsers));
+        rename.addActionListener(new TabHomeRenameListener(frame, fileToDirectoryModel,panelTree,displayUsers));
 
         createDirectory = new JButton();
         addButtonItem(createDirectory, "src/main/resources/images/Folder.png", 6);
-        createDirectory.addActionListener(new TabHomeAddListener(frame, FileToDirectoryModel,panelTree,displayUsers));
+        createDirectory.addActionListener(new TabHomeAddListener(frame, fileToDirectoryModel,panelTree,displayUsers));
 
 
         toolbarDropDown = new JToolBar();

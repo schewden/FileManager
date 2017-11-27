@@ -15,24 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class badgeInDirectoryMouseListener extends MouseAdapter {
+public class BadgeInDirectoryMouseListener extends MouseAdapter {
     private JLabel[] highlightBadge = new JLabel[1];
 
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private PanelDisplayDirectory panelDisplayDirectory;
     private DisplayUsers displayUsers;
     private BackAndNextModel backAndNextModel;
 
-    public badgeInDirectoryMouseListener(FileToDirectoryModel FileToDirectoryModel, PanelDisplayDirectory panelDisplayDirectory,
+    public BadgeInDirectoryMouseListener(FileToDirectoryModel fileToDirectoryModel, PanelDisplayDirectory panelDisplayDirectory,
                                          DisplayUsers displayUsers, BackAndNextModel backAndNextModel) {
-        this.FileToDirectoryModel = FileToDirectoryModel;
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.panelDisplayDirectory = panelDisplayDirectory;
         this.displayUsers = displayUsers;
         this.backAndNextModel = backAndNextModel;
     }
 
     public void mouseClicked(MouseEvent e) {
-        FileToDirectoryModel.setSelectedDirectory(null);
+        fileToDirectoryModel.setSelectedDirectory(null);
 
         JLabel badge = (JLabel) e.getSource();
         String badgeName = badge.getText();
@@ -40,18 +40,18 @@ public class badgeInDirectoryMouseListener extends MouseAdapter {
         highlightCurrentBadge(badge, highlightBadge);
 
         if (e.getClickCount() == 1) {
-           List<File> fileList = new ArrayList<>(FileToDirectoryModel.getDirectoriesList());
+           List<File> fileList = new ArrayList<>(fileToDirectoryModel.getListFilesAndDirectories());
             for (int i = 0; i < fileList.size(); i++) {
                 String fileNameInList = fileList.get(i).getName();
                 if (fileNameInList.equals(badgeName)) {
-                    FileToDirectoryModel.setSelectedDirectory(fileList.get(i).getAbsoluteFile());
+                    fileToDirectoryModel.setSelectedDirectory(fileList.get(i).getAbsoluteFile());
                 }
             }
         }
 
         if (e.getClickCount() == 2) {
             TreePath currentPath;
-            List<File> directoryList = FileToDirectoryModel.getDirectoriesList();
+            List<File> directoryList = fileToDirectoryModel.getDirectoriesList();
             for (File fileInDirectoryList : directoryList) {
                 String directoryNameInList = fileInDirectoryList.getName();
                 if (directoryNameInList.equals(badgeName)) {
@@ -61,11 +61,11 @@ public class badgeInDirectoryMouseListener extends MouseAdapter {
                     panelDisplayDirectory.getPanelTree().getTreeDirectory().expandPath(currentPath);
                     panelDisplayDirectory.getPanelTree().getTreeDirectory().scrollPathToVisible(currentPath);
 
-                    FileToDirectoryModel.setFileToDirectory(fileInDirectoryList);
+                    fileToDirectoryModel.setFileToDirectory(fileInDirectoryList);
                 }
             }
-            backAndNextModel.setPreviousFiles(FileToDirectoryModel.getFileToDirectory());
-            displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+            backAndNextModel.setPreviousFiles(fileToDirectoryModel.getFileToDirectory());
+            displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
         }
     }
 

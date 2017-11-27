@@ -16,7 +16,7 @@ public class PanelByDirectory {
     private JTextField fieldSearch;
     private Dimension dimension;
 
-    public PanelByDirectory(JPanel panel, PanelTree panelTree, FileToDirectoryModel FileToDirectoryModel,
+    public PanelByDirectory(JPanel panel, PanelTree panelTree, FileToDirectoryModel fileToDirectoryModel,
                             DisplayUsers displayUsers, BackAndNextModel backAndNextModel) {
 
         panel.setLayout(new GridBagLayout());
@@ -26,27 +26,27 @@ public class PanelByDirectory {
         buttonBack = new JButton();
         addButtonItem(buttonBack, "src/main/resources/images/previous.png");
         panel.add(buttonBack, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
-        buttonBack.addActionListener(new BackListener(FileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
+        buttonBack.addActionListener(new BackListener(fileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
 
         buttonNext = new JButton();
         addButtonItem(buttonNext, "src/main/resources/images/next.png");
         panel.add(buttonNext, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
-        buttonNext.addActionListener(new NextListener(FileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
+        buttonNext.addActionListener(new NextListener(fileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
 
         addressBar = new JTextField();
         addressBar.setPreferredSize(dimension);
         panel.add(addressBar, new GridBagConstraints(2, 0, 6, 1, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        addressBar.addActionListener(new AddressBarListener(panelTree, FileToDirectoryModel, displayUsers, backAndNextModel));
+        addressBar.addActionListener(new AddressBarListener(panelTree, fileToDirectoryModel, displayUsers, backAndNextModel));
 
         buttonRefresh = new JButton();
         addButtonItem(buttonRefresh, "src/main/resources/images/recur.png");
         panel.add(buttonRefresh, new GridBagConstraints(8, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(2, 2, 2, 2), 0, 0));
-        buttonRefresh.addActionListener(new RefreshListener(FileToDirectoryModel, panelTree));
+        buttonRefresh.addActionListener(new RefreshListener(fileToDirectoryModel, panelTree));
 
         fieldSearch = new JTextField();
         fieldSearch.setPreferredSize(dimension);
         panel.add(fieldSearch, new GridBagConstraints(9, 0, 1, 1, 0.2, 0, GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(2, 2, 2, 0), 0, 0));
-        fieldSearch.addActionListener(new FileSearchListener(FileToDirectoryModel, displayUsers));
+        fieldSearch.addActionListener(new FileSearchListener(fileToDirectoryModel, displayUsers));
 
         buttonSearch = new JButton();
         addButtonItem(buttonSearch, "src/main/resources/images/search.png");

@@ -1,6 +1,6 @@
 package com.shevelev.manager.view;
 
-import com.shevelev.manager.controller.center.display.badgeInDirectoryMouseListener;
+import com.shevelev.manager.controller.center.display.BadgeInDirectoryMouseListener;
 import com.shevelev.manager.model.BackAndNextModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
 
@@ -24,17 +24,17 @@ public class PanelDisplayDirectory {
     private JLabel badgeFile;
     private JPanel panelCenter;
 
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
     private PanelTree panelTree;
     private BackAndNextModel backAndNextModel;
-    private badgeInDirectoryMouseListener badgeInDirectoryMouseListener;
+    private BadgeInDirectoryMouseListener badgeInDirectoryMouseListener;
 
 
-    public PanelDisplayDirectory(JPanel panelCenter, FileToDirectoryModel FileToDirectoryModel,
+    public PanelDisplayDirectory(JPanel panelCenter, FileToDirectoryModel fileToDirectoryModel,
                                  DisplayUsers displayUsers, BackAndNextModel backAndNextModel) {
         this.panelCenter = panelCenter;
-        this.FileToDirectoryModel = FileToDirectoryModel;
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.displayUsers = displayUsers;
         this.backAndNextModel = backAndNextModel;
 
@@ -43,8 +43,8 @@ public class PanelDisplayDirectory {
         panelInPanelCenter.setPreferredSize(new Dimension(580, 1000));
         panelInPanelCenter.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 
-        badgeInDirectoryMouseListener = new badgeInDirectoryMouseListener(FileToDirectoryModel, this, displayUsers, backAndNextModel);
-        updateCurrentDirectory(FileToDirectoryModel.getListFilesAndDirectories());
+        badgeInDirectoryMouseListener = new BadgeInDirectoryMouseListener(fileToDirectoryModel, this, displayUsers, backAndNextModel);
+        updateCurrentDirectory(fileToDirectoryModel.getListFilesAndDirectories());
     }
 
     public JPanel getPanelInPanelCenter() {
@@ -67,10 +67,10 @@ public class PanelDisplayDirectory {
             if (currentFile.isDirectory()) {
                 badgeFile.setIcon(new ImageIcon(ICON_DIRECTORY));
                 directoryList.add(currentFile);
-                FileToDirectoryModel.setDirectoriesList(directoryList);
+                fileToDirectoryModel.setDirectoriesList(directoryList);
             } else {
                 fileList.add(currentFile);
-                FileToDirectoryModel.setFilesList(fileList);
+                fileToDirectoryModel.setFilesList(fileList);
                 badgeFile.setIcon(new ImageIcon(ICON_FILE));
             }
             badgeFile.setToolTipText(badgeFile.getText());

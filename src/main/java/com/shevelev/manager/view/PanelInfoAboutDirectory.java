@@ -15,11 +15,11 @@ public class PanelInfoAboutDirectory {
     private JLabel elements;
     private JLabel countElements;
     private JPanel panelInfo;
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
 
-    public PanelInfoAboutDirectory(JPanel panelInfo, FileToDirectoryModel FileToDirectoryModel) {
+    public PanelInfoAboutDirectory(JPanel panelInfo, FileToDirectoryModel fileToDirectoryModel) {
         this.panelInfo = panelInfo;
-        this.FileToDirectoryModel = FileToDirectoryModel;
+        this.fileToDirectoryModel = fileToDirectoryModel;
 
         panelInfo.setBorder(new EtchedBorder());
         addPanelInfo();
@@ -34,7 +34,7 @@ public class PanelInfoAboutDirectory {
         elements.setFont(FONT);
 
         countElements = new JLabel();
-        countElements.setText(FileToDirectoryModel.getListFilesAndDirectories().size() + "");
+        countElements.setText(fileToDirectoryModel.getListFilesAndDirectories().size() + "");
         countElements.setFont(FONT);
 
         panelInfo.add(elements);

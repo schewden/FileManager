@@ -2,6 +2,7 @@ package com.shevelev.manager.view;
 
 import com.shevelev.manager.controller.panel.west.tree.FileTreeCellRenderer;
 import com.shevelev.manager.controller.panel.west.tree.TreeListener;
+import com.shevelev.manager.controller.tab.ErrorMessage;
 import com.shevelev.manager.model.BackAndNextModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
 
@@ -19,12 +20,14 @@ public class PanelTree {
     private File fileRoot;
     private DefaultTreeModel defaultTreeModel;
     private TreeSelectionModel selectionModel;
+    private DisplayUsers displayUsers;
 
     public PanelTree(PanelDisplayDirectory panelDisplayDirectory, JPanel panelTree,
-                     FileToDirectoryModel FileToDirectoryModel, DisplayUsers displayUsers,
+                     FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers,
                      BackAndNextModel backAndNextModel) {
+        this.displayUsers = displayUsers;
 
-        fileRoot = FileToDirectoryModel.getFileToDirectory();
+        fileRoot = fileToDirectoryModel.getFileToDirectory();
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(fileRoot);
         defaultTreeModel = new DefaultTreeModel(root);
@@ -38,7 +41,7 @@ public class PanelTree {
         selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        treeDirectory.addTreeSelectionListener(new TreeListener(FileToDirectoryModel, displayUsers, this, backAndNextModel));
+        treeDirectory.addTreeSelectionListener(new TreeListener(fileToDirectoryModel, displayUsers, this, backAndNextModel));
 
         scrollPane = new JScrollPane(treeDirectory);
         scrollPane.setPreferredSize(new Dimension(200, 390));
@@ -111,21 +114,27 @@ public class PanelTree {
     }
 
     public void getPathCurrentFileInJTree(File currentFile, List<File> currentListParentFiles) {
-        if (currentFile != null) {
-            if (currentFile.isDirectory()) {
-                currentListParentFiles.add(currentFile);
-                getPathCurrentFileInJTree(currentFile.getParentFile(), currentListParentFiles);
+        try {
+            if (currentFile != null) {
+                if (currentFile.isDirectory()) {
+                    currentListParentFiles.add(currentFile);
+                    getPathCurrentFileInJTree(currentFile.getParentFile(), currentListParentFiles);
+                } else {
+                    currentFile = currentFile.getParentFile();
+                    currentListParentFiles.add(currentFile);
+                    getPathCurrentFileInJTree(currentFile.getParentFile(), currentListParentFiles);
+                }
             } else {
-                currentFile = currentFile.getParentFile();
-                currentListParentFiles.add(currentFile);
-                getPathCurrentFileInJTree(currentFile.getParentFile(), currentListParentFiles);
+                File[] currentTreePath = new File[currentListParentFiles.size()];
+                for (int i = 0; i < currentTreePath.length; i++) {
+                    currentTreePath[i] = currentListParentFiles.get(currentTreePath.length - i - 1);
+                    openCurrentFileInJTree(currentTreePath[i]);
+                }
             }
-        } else {
-            File[] currentTreePath = new File[currentListParentFiles.size()];
-            for (int i = 0; i < currentTreePath.length; i++) {
-                currentTreePath[i] = currentListParentFiles.get(currentTreePath.length - i - 1);
-                openCurrentFileInJTree(currentTreePath[i]);
-            }
+        }catch (NullPointerException npe) {
+            ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
+            String msg = "Вы ввели некорректный адрес!";
+            errorMessage.errorMessagePane(msg, "Ошибка перехода по адресной строке");
         }
     }
 }

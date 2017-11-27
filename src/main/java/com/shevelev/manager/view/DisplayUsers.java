@@ -1,7 +1,7 @@
 package com.shevelev.manager.view;
 
 import com.shevelev.manager.model.BackAndNextModel;
-import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.InsertModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
 
 import javax.swing.*;
@@ -21,9 +21,9 @@ public class DisplayUsers {
     private JPanel panelTree;
     private JPanel panelInfo;
 
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private BackAndNextModel backAndNextModel;
-    private CutModel cutModel;
+    private InsertModel insertModel;
 
     private PanelDisplayDirectory panelDisplayDirectory;
     private PanelTree panelTreeClass;
@@ -35,33 +35,33 @@ public class DisplayUsers {
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(800, 600));
 
-        FileToDirectoryModel = new FileToDirectoryModel();
+        fileToDirectoryModel = new FileToDirectoryModel();
         backAndNextModel = new BackAndNextModel();
-        cutModel = new CutModel();
+        insertModel = new InsertModel();
 
         File rootSystem = new File("/");
 
-        FileToDirectoryModel.setFileToDirectory(rootSystem);
+        fileToDirectoryModel.setFileToDirectory(rootSystem);
         backAndNextModel.setPreviousFiles(rootSystem);
 
         panelInfo = new JPanel();
         frame.add(panelInfo, BorderLayout.SOUTH);
-        panelInfoAboutDirectory = new PanelInfoAboutDirectory(panelInfo, FileToDirectoryModel);
+        panelInfoAboutDirectory = new PanelInfoAboutDirectory(panelInfo, fileToDirectoryModel);
 
         panelCenter = new JPanel();
         frame.add(panelCenter, BorderLayout.CENTER);
-        panelDisplayDirectory = new PanelDisplayDirectory(panelCenter, FileToDirectoryModel, this, backAndNextModel);
+        panelDisplayDirectory = new PanelDisplayDirectory(panelCenter, fileToDirectoryModel, this, backAndNextModel);
 
         panelTree = new JPanel();
         frame.add(panelTree, BorderLayout.WEST);
-        panelTreeClass = new PanelTree(panelDisplayDirectory, panelTree, FileToDirectoryModel, this, backAndNextModel);
+        panelTreeClass = new PanelTree(panelDisplayDirectory, panelTree, fileToDirectoryModel, this, backAndNextModel);
 
         panelDirectory = new JPanel();
-        panelByDirectory = new PanelByDirectory(panelDirectory, panelTreeClass, FileToDirectoryModel, this, backAndNextModel);
+        panelByDirectory = new PanelByDirectory(panelDirectory, panelTreeClass, fileToDirectoryModel, this, backAndNextModel);
 
         panelMenu = new JPanel();
         frame.add(panelMenu, BorderLayout.NORTH);
-        new TopMenuBar(frame, panelMenu, FileToDirectoryModel, panelTreeClass, this, panelByDirectory, cutModel);
+        new TopMenuBar(frame, panelMenu, fileToDirectoryModel, panelTreeClass, this, panelByDirectory, insertModel);
 
         panelMenu.add(panelDirectory, BorderLayout.SOUTH);
 

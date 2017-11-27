@@ -3,7 +3,7 @@ package com.shevelev.manager.model;
 /**
  * Created by denis on 26.11.17.
  */
-public class CutModel {
+public class InsertModel {
     private Object storageCurrentTreePath;
     private boolean markCutFileOrDir;
 

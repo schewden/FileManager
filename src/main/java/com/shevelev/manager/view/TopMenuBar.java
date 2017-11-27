@@ -1,7 +1,7 @@
 package com.shevelev.manager.view;
 
 import com.shevelev.manager.controller.menu.MenuMouseListener;
-import com.shevelev.manager.model.CutModel;
+import com.shevelev.manager.model.InsertModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.view.menu.ButtonFileMenu;
 import com.shevelev.manager.view.menu.TabHomePanel;
@@ -20,11 +20,11 @@ public class TopMenuBar {
     private JTabbedPane tabbedPane;
     private TabHomePanel tabHomePanel;
 
-    public TopMenuBar(JFrame frame, JPanel panelMenu, FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, CutModel cutModel){
+    public TopMenuBar(JFrame frame, JPanel panelMenu, FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, InsertModel insertModel){
         panelMenu.setLayout(new BorderLayout());
         Font font = new Font("Times New Roman", Font.ITALIC, 14);
         tabbedPane = new JTabbedPane();
-        tabHomePanel = new TabHomePanel(frame, FileToDirectoryModel,panelTree,displayUsers,panelByDirectory,cutModel);
+        tabHomePanel = new TabHomePanel(frame, fileToDirectoryModel,panelTree,displayUsers,panelByDirectory, insertModel);
         menuBar = new JMenuBar();
 
         menuFile = new JMenu("Файл");
@@ -38,7 +38,6 @@ public class TopMenuBar {
         tabbedPane.add("Главная", tabHomePanel.getPanel());
         tabbedPane.setFont(font);
 
-        tabbedPane.setSelectedIndex(0);
         frame.setJMenuBar(menuBar);
 
         menuFile.addMouseListener(new MenuMouseListener(menuFile, tabbedPane));

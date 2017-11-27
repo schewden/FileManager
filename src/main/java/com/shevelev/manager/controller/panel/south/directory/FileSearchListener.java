@@ -1,5 +1,6 @@
 package com.shevelev.manager.controller.panel.south.directory;
 
+import com.shevelev.manager.controller.tab.ErrorMessage;
 import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.model.SearchModel;
 import com.shevelev.manager.view.DisplayUsers;
@@ -9,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -17,8 +17,8 @@ public class FileSearchListener implements ActionListener {
     private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
 
-    public FileSearchListener(FileToDirectoryModel FileToDirectoryModel, DisplayUsers displayUsers) {
-        this.fileToDirectoryModel = FileToDirectoryModel;
+    public FileSearchListener(FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.displayUsers = displayUsers;
     }
 
@@ -28,20 +28,26 @@ public class FileSearchListener implements ActionListener {
 
         JTextField nameSearchFile = (JTextField) e.getSource();
 
-        HashMap<String, File> currentFilesInDirectory = new HashMap<>();
+        List<File> currentFilesInDirectory = new ArrayList<>();
         List<String> currentFilesStringInDirectory = new ArrayList<>();
 
         searchModel.setCurrentFilesStringInDirectory(currentFilesStringInDirectory);
-        searchModel.setCurrentFilesInDirectory(fileToDirectoryModel.getFileToDirectory(), currentFilesInDirectory);
+        searchModel.setCurrentFilesInDirectory1(fileToDirectoryModel.getFileToDirectory(), currentFilesInDirectory);
 
         List<File> foundListFiles = new ArrayList<>();
         for (int i = 0; i < currentFilesInDirectory.size(); i++) {
             if (currentFilesStringInDirectory.get(i).contains(nameSearchFile.getText())) {
-                File foundFile = currentFilesInDirectory.get(currentFilesStringInDirectory.get(i));
+                File foundFile = currentFilesInDirectory.get(i);
                 foundListFiles.add(foundFile);
             }
         }
-        displayUsers.repaintGUI(foundListFiles);
+        if (!foundListFiles.isEmpty()) {
+            displayUsers.repaintGUI(foundListFiles);
+        }else {
+            ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
+            String msg = "Такого файла нет, пожалуйста проверьте корректно ли ввели имя файла!";
+            errorMessage.errorMessagePane(msg,"Ошибка поиска");
+        }
     }
 }
 

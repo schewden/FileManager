@@ -12,14 +12,14 @@ import javax.swing.tree.TreePath;
 import java.io.File;
 
 public class TreeListener  implements TreeSelectionListener {
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
     private PanelTree panelTree;
     private BackAndNextModel backAndNextModel;
 
-    public TreeListener(FileToDirectoryModel FileToDirectoryModel, DisplayUsers displayUsers,
+    public TreeListener(FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers,
                         PanelTree panelTree, BackAndNextModel backAndNextModel){
-        this.FileToDirectoryModel = FileToDirectoryModel;
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.displayUsers = displayUsers;
         this.panelTree = panelTree;
         this.backAndNextModel = backAndNextModel;
@@ -29,16 +29,17 @@ public class TreeListener  implements TreeSelectionListener {
     public void valueChanged(TreeSelectionEvent e) {
         AddNewNode addNewNode = new AddNewNode();
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-        TreePath currentNodePath = panelTree.getTreePathInJTree((File)node.getUserObject());
+        TreePath currentNodePath = e.getPath();
         if (panelTree.getTreeDirectory().isExpanded(currentNodePath)){
-            FileToDirectoryModel.setFileToDirectory((File)node.getUserObject());
+            fileToDirectoryModel.setFileToDirectory((File)node.getUserObject());
             backAndNextModel.setPreviousFiles((File)node.getUserObject());
-            displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+            displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
         }else {
             addNewNode.createChild(node);
-            FileToDirectoryModel.setFileToDirectory((File)node.getUserObject());
+            panelTree.getTreeDirectory().expandPath(currentNodePath);
+            fileToDirectoryModel.setFileToDirectory((File)node.getUserObject());
             backAndNextModel.setPreviousFiles((File)node.getUserObject());
-            displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+            displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
         }
     }
 }

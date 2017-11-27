@@ -1,27 +1,36 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.CutModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
-import com.shevelev.manager.view.PanelTree;
+import com.shevelev.manager.model.InsertModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by denis on 21.11.17.
+ * In this class, the copyPath button listener controller is implemented
  */
 public class TabHomeCopyPathListener implements ActionListener {
-    private FileToDirectoryModel FileToDirectoryModel;
-    private PanelTree panelTree;
-    private CutModel cutModel;
+    private FileToDirectoryModel fileToDirectoryModel;
+    private InsertModel insertModel;
 
-    public TabHomeCopyPathListener(FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, CutModel cutModel){
-        this.FileToDirectoryModel = FileToDirectoryModel;
-        this.panelTree = panelTree;
-        this.cutModel = cutModel;
+    /**
+     * Constructor
+     *
+     * @param fileToDirectoryModel - model by files (FileToDirectoryModel.java)
+     * @param insertModel          - model of inserting a directory or file (InsertModel.java)
+     */
+    public TabHomeCopyPathListener(FileToDirectoryModel fileToDirectoryModel, InsertModel insertModel) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
+        this.insertModel = insertModel;
     }
+
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     public void actionPerformed(ActionEvent e) {
-        cutModel.setStorageCurrentTreePath(FileToDirectoryModel.getFileToDirectory().getPath());
-        cutModel.setMarkCutFileOrDir(false);
+        insertModel.setStorageCurrentTreePath(fileToDirectoryModel.getFileToDirectory().getPath());
+        insertModel.setMarkCutFileOrDir(false);
     }
 }

@@ -14,14 +14,14 @@ import java.util.List;
 
 public class AddressBarListener implements ActionListener {
     private PanelTree panelTree;
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
     private BackAndNextModel backAndNextModel;
 
-    public AddressBarListener(PanelTree panelTree, FileToDirectoryModel FileToDirectoryModel,
+    public AddressBarListener(PanelTree panelTree, FileToDirectoryModel fileToDirectoryModel,
                               DisplayUsers displayUsers, BackAndNextModel backAndNextModel){
         this.panelTree = panelTree;
-        this.FileToDirectoryModel = FileToDirectoryModel;
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.displayUsers = displayUsers;
         this.backAndNextModel = backAndNextModel;
 
@@ -32,12 +32,11 @@ public class AddressBarListener implements ActionListener {
         JTextField addressBar = (JTextField) e.getSource();
         File currentFile = new File(addressBar.getText());
         List<File> currentListParentFiles = new ArrayList<>();
-
         panelTree.getPathCurrentFileInJTree(currentFile,currentListParentFiles);
 
-        FileToDirectoryModel.setFileToDirectory(currentFile);
+        fileToDirectoryModel.setFileToDirectory(currentFile);
         backAndNextModel.setPreviousFiles(currentFile);
 
-        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+        displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
     }
 }

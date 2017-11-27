@@ -1,7 +1,7 @@
 package com.shevelev.manager.controller.tab;
 
-import com.shevelev.manager.model.CutModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
+import com.shevelev.manager.model.InsertModel;
 import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelByDirectory;
 import com.shevelev.manager.view.PanelTree;
@@ -13,82 +13,167 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Created by denis on 21.11.17.
+ * In this class, the insert button listener controller is implemented.
+ * You can insert the path of the directory, the copied directory or file, and the cut directory or file.
  */
 public class TabHomeInsertListener implements ActionListener {
-    private FileToDirectoryModel FileToDirectoryModel;
-    private Object currentTreePath;
+    private FileToDirectoryModel fileToDirectoryModel;
     private PanelByDirectory panelByDirectory;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
-    private CutModel cutModel;
+    private InsertModel insertModel;
 
-    private File destDir;
-    private File srcDir;
-    private boolean success = false;
-
-    public TabHomeInsertListener(FileToDirectoryModel FileToDirectoryModel, PanelByDirectory panelByDirectory,
+    /**
+     * Constructor
+     *
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param panelByDirectory     - panel by directories (PanelByDirectory.java)
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     * @param insertModel          - model of inserting a directory or file (InsertModel.java)
+     */
+    public TabHomeInsertListener(FileToDirectoryModel fileToDirectoryModel, PanelByDirectory panelByDirectory,
                                  PanelTree panelTree, DisplayUsers displayUsers,
-                                 CutModel cutModel) {
-        this.FileToDirectoryModel = FileToDirectoryModel;
+                                 InsertModel insertModel) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.panelByDirectory = panelByDirectory;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
-        this.cutModel =cutModel;
+        this.insertModel = insertModel;
     }
 
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     public void actionPerformed(ActionEvent e) {
-        currentTreePath = cutModel.getStorageCurrentTreePath();
-        if (currentTreePath instanceof String) {
-            String name = currentTreePath.toString();
-            panelByDirectory.getAddressBar().setText(name);
-        } else {
-            try {
-                destDir = FileToDirectoryModel.getFileToDirectory();
-                srcDir = (File) currentTreePath;
-                if (srcDir.isDirectory()) {
-                    String nameSrcDir = srcDir.getName();
-                    TreePath srcTreePath = panelTree.getTreePathInJTree(srcDir);
-                    DefaultMutableTreeNode srcParentNode = (DefaultMutableTreeNode) srcTreePath.getParentPath().getLastPathComponent();
-                    if (!cutModel.isMarkCutFileOrDir()) {
-                        FileUtils.copyDirectoryToDirectory(srcDir, destDir);
-                        success = true;
-                    } else {
-                        FileUtils.moveDirectoryToDirectory(srcDir, destDir, true);
-                        success = true;
-                    }
-                    if (success) {
-                        File destFile = FileToDirectoryModel.getFileToDirectory();
-                        TreePath destTreePath = panelTree.getTreePathInJTree(destFile);
-                        if (!cutModel.isMarkCutFileOrDir()) {
-                            DefaultMutableTreeNode parentDest = (DefaultMutableTreeNode) destTreePath.getLastPathComponent();
-                            DefaultMutableTreeNode srcNewNode = new DefaultMutableTreeNode(srcDir);
-                            panelTree.getDefaultTreeModel().insertNodeInto(srcNewNode, parentDest, parentDest.getChildCount());
-                        } else {
-                            panelTree.removeNodeFromJTree(srcTreePath, srcParentNode, panelTree.getDefaultTreeModel());
-                            panelTree.insertNodeIntoJTree(destTreePath, panelTree.getDefaultTreeModel(), nameSrcDir);
-                        }
-                        FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
-                        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
-                    }
+        try {
+
+            Object currentFile = insertModel.getStorageCurrentTreePath();
+            if (currentFile instanceof String) {
+                String name = currentFile.toString();
+                panelByDirectory.getAddressBar().setText(name);
+            } else {
+                File src = (File) currentFile;
+                File destDir = fileToDirectoryModel.getFileToDirectory();
+                if (src.isDirectory() && destDir.isDirectory()) {
+                    insertDirectory(src, destDir, panelTree, fileToDirectoryModel, insertModel, displayUsers);
                 } else {
-                    if (!cutModel.isMarkCutFileOrDir()) {
-                        FileUtils.copyFileToDirectory(srcDir, destDir);
-                        success = true;
-                    } else {
-                        FileUtils.moveFileToDirectory(srcDir, destDir, true);
-                        success = true;
-                    }
-                    if (success) {
-                        FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
-                        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+                    insertFile(src, destDir, fileToDirectoryModel, insertModel, displayUsers);
+                }
+            }
+        } catch (NullPointerException npe) {
+            ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
+            String msg = "Нет файлов в буфере!";
+            errorMessage.errorMessagePane(msg, "Ошибка вставки");
+        }
+    }
+
+    /**
+     * The procedure for inserting a directory
+     *
+     * @param srcDir               - an existing directory to copy, must not be null
+     * @param destDir              - the directory(file) to place the copy in, must not be null
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param fileToDirectoryModel - model by files (FileToDirectoryModel.java)
+     * @param insertModel          - model of inserting a directory or file (InsertModel.java)
+     */
+    private void insertDirectory(File srcDir, File destDir, PanelTree panelTree,
+                                 FileToDirectoryModel fileToDirectoryModel, InsertModel insertModel,
+                                 DisplayUsers displayUsers) {
+        try {
+            String nameSrcDir = srcDir.getName();
+            TreePath srcTreePath = panelTree.getTreePathInJTree(srcDir);
+            DefaultMutableTreeNode srcParentNode = (DefaultMutableTreeNode) srcTreePath.getParentPath().getLastPathComponent();
+            String[] destDirFilesList = destDir.list();
+            if (!insertModel.isMarkCutFileOrDir()) {
+                if (destDirFilesList != null) {
+                    List<String> destDirList = Arrays.asList(destDirFilesList);
+                    String currentNameDir = srcDir.getName();
+                    if (destDirList.contains(currentNameDir)) {
+                        int count = 1;
+                        for (int i = 0; i < destDirList.size(); i++) {
+                            currentNameDir = srcDir.getName() + " копия " + "(" + count + ")";
+                            if (destDirList.contains(currentNameDir)) {
+                                count++;
+                            } else {
+                                FileUtils.copyDirectoryToDirectory(srcDir, new File(destDir, currentNameDir));
+                                break;
+                            }
+                        }
+                    } else if (!destDirList.contains(currentNameDir)) {
+                        FileUtils.copyDirectoryToDirectory(srcDir, new File(destDir, currentNameDir));
+                    } else if (destDir.equals(srcDir)) {
+                        String msg = "Нельзя скопировать каталог сам в себя!";
+                        ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
+                        errorMessage.errorMessagePane(msg, "Ошибка вставки");
                     }
                 }
-            } catch (IOException e1) {
-                e1.printStackTrace();
+
+            } else {
+                FileUtils.moveDirectoryToDirectory(srcDir, destDir, true);
             }
+            File destFile = fileToDirectoryModel.getFileToDirectory();
+            TreePath destTreePath = panelTree.getTreePathInJTree(destFile);
+            if (!insertModel.isMarkCutFileOrDir()) {
+                DefaultMutableTreeNode parentDestDir = (DefaultMutableTreeNode) destTreePath.getLastPathComponent();
+                DefaultMutableTreeNode srcNewNode = new DefaultMutableTreeNode(srcDir);
+                panelTree.getDefaultTreeModel().insertNodeInto(srcNewNode, parentDestDir, parentDestDir.getChildCount());
+            } else {
+                panelTree.removeNodeFromJTree(srcTreePath, srcParentNode, panelTree.getDefaultTreeModel());
+                panelTree.insertNodeIntoJTree(destTreePath, panelTree.getDefaultTreeModel(), nameSrcDir);
+            }
+            fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
+            displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    /**
+     * The procedure for inserting a file
+     *
+     * @param srcFile              - an existing file to copy, must not be null
+     * @param destDir              - the directory(file) to place the copy in, must not be null
+     * @param fileToDirectoryModel - model by files (FileToDirectoryModel.java)
+     * @param insertModel          - model of inserting a directory or file (InsertModel.java)
+     */
+    private void insertFile(File srcFile, File destDir, FileToDirectoryModel fileToDirectoryModel,
+                            InsertModel insertModel, DisplayUsers displayUsers) {
+        try {
+            if (!insertModel.isMarkCutFileOrDir()) {
+                String[] destDirFilesList = destDir.list();
+                if (destDirFilesList != null) {
+                    List<String> destDirList = Arrays.asList(destDirFilesList);
+                    String currentNameFile = srcFile.getName();
+                    int dotIndex = currentNameFile.lastIndexOf('.');
+                    if (destDirList.contains(currentNameFile)) {
+                        int count = 1;
+                        for (int i = 0; i < destDirList.size(); i++) {
+                            currentNameFile = srcFile.getName().substring(0, dotIndex) + " копия " + "(" + count + ")" + srcFile.getName().substring(dotIndex);
+                            if (destDirList.contains(currentNameFile)) {
+                                count++;
+                            } else {
+                                FileUtils.copyFile(srcFile, new File(destDir, currentNameFile));
+                                break;
+                            }
+                        }
+                    } else {
+                        FileUtils.copyFile(srcFile, new File(destDir, currentNameFile));
+                    }
+                }
+            } else {
+                FileUtils.moveFileToDirectory(srcFile, destDir, true);
+            }
+            fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
+            displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 }
