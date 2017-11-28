@@ -20,11 +20,13 @@ public class TopMenuBar {
     private JTabbedPane tabbedPane;
     private TabHomePanel tabHomePanel;
 
-    public TopMenuBar(JFrame frame, JPanel panelMenu, FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, InsertModel insertModel){
+    public TopMenuBar(JPanel panelMenu, FileToDirectoryModel fileToDirectoryModel,
+                      PanelTree panelTree, DisplayUsers displayUsers,
+                      PanelByDirectory panelByDirectory, InsertModel insertModel){
         panelMenu.setLayout(new BorderLayout());
         Font font = new Font("Times New Roman", Font.ITALIC, 14);
         tabbedPane = new JTabbedPane();
-        tabHomePanel = new TabHomePanel(frame, fileToDirectoryModel,panelTree,displayUsers,panelByDirectory, insertModel);
+        tabHomePanel = new TabHomePanel(fileToDirectoryModel,panelTree,displayUsers,panelByDirectory, insertModel);
         menuBar = new JMenuBar();
 
         menuFile = new JMenu("Файл");
@@ -38,7 +40,7 @@ public class TopMenuBar {
         tabbedPane.add("Главная", tabHomePanel.getPanel());
         tabbedPane.setFont(font);
 
-        frame.setJMenuBar(menuBar);
+        displayUsers.getFrame().setJMenuBar(menuBar);
 
         menuFile.addMouseListener(new MenuMouseListener(menuFile, tabbedPane));
     }

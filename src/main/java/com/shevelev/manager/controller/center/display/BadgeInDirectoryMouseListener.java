@@ -41,15 +41,16 @@ public class BadgeInDirectoryMouseListener extends MouseAdapter {
 
         if (e.getClickCount() == 1) {
            List<File> fileList = new ArrayList<>(fileToDirectoryModel.getListFilesAndDirectories());
-            for (int i = 0; i < fileList.size(); i++) {
-                String fileNameInList = fileList.get(i).getName();
+            for (File aFileList : fileList) {
+                String fileNameInList = aFileList.getName();
                 if (fileNameInList.equals(badgeName)) {
-                    fileToDirectoryModel.setSelectedDirectory(fileList.get(i).getAbsoluteFile());
+                    fileToDirectoryModel.setSelectedDirectory(aFileList.getAbsoluteFile());
                 }
             }
         }
 
         if (e.getClickCount() == 2) {
+            fileToDirectoryModel.setSelectedDirectory(null);
             TreePath currentPath;
             List<File> directoryList = fileToDirectoryModel.getDirectoriesList();
             for (File fileInDirectoryList : directoryList) {

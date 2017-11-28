@@ -13,28 +13,37 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
- * Created by denis on 16.11.17.
+ * In this class, the create button listener controller is implemented
  */
 public class TabHomeAddListener implements ActionListener {
-    private boolean createdObject;
-    private JFrame frame;
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
 
-    public TabHomeAddListener(JFrame frame, FileToDirectoryModel FileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers) {
-        this.frame = frame;
-        this.FileToDirectoryModel = FileToDirectoryModel;
+    /**
+     *Constructor
+     *
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     */
+    public TabHomeAddListener(FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
     }
 
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     public void actionPerformed(ActionEvent e) {
         NewFilePanel newFilePanel = new NewFilePanel();
         UIManager.put("OptionPane.yesButtonText", "Создать");
         UIManager.put("OptionPane.noButtonText", "Отмена");
 
-        int result = JOptionPane.showConfirmDialog(frame,
+        int result = JOptionPane.showConfirmDialog(displayUsers.getFrame(),
                 newFilePanel.getNewFilePanel(),
                 "Создать папку",
                 JOptionPane.YES_NO_OPTION,
@@ -42,29 +51,28 @@ public class TabHomeAddListener implements ActionListener {
         if (result == JOptionPane.YES_OPTION) {
             try {
                 if (!newFilePanel.getName().getText().equals("")) {
-                    File parentFile = FileToDirectoryModel.getFileToDirectory();
+                    File parentFile = fileToDirectoryModel.getFileToDirectory();
                     File newFile = new File(parentFile, newFilePanel.getName().getText());
+                    boolean createdObject;
                     if (newFilePanel.getNewTypeDirectory().isSelected()) {
                         createdObject = newFile.mkdir();
                     } else {
                         createdObject = newFile.createNewFile();
                     }
                     if (createdObject) {
-                        FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
-                        TreePath treePath = panelTree.getTreePathInJTree(parentFile);
-                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) treePath.getLastPathComponent();
                         if (newFile.isDirectory()) {
+                            TreePath treePath = panelTree.getTreePathInJTree(parentFile);
+                            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) treePath.getLastPathComponent();
                             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile);
                             panelTree.getDefaultTreeModel().insertNodeInto(newNode, parentNode, parentNode.getChildCount());
                             panelTree.getTreeDirectory().expandPath(treePath);
-
                         }
-
-                        displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+                        fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
+                        displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
                     }
                 } else {
                     String msg = "Вы не ввели имя файла.Пожалуйста,введите имя файла!";
-                    ErrorMessage errorMessage = new ErrorMessage(frame);
+                    ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
                     errorMessage.errorMessagePane(msg, "Ошибка создания файла");
                 }
             } catch (Throwable t) {

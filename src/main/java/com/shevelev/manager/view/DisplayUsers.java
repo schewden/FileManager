@@ -61,7 +61,7 @@ public class DisplayUsers {
 
         panelMenu = new JPanel();
         frame.add(panelMenu, BorderLayout.NORTH);
-        new TopMenuBar(frame, panelMenu, fileToDirectoryModel, panelTreeClass, this, panelByDirectory, insertModel);
+        new TopMenuBar(panelMenu, fileToDirectoryModel, panelTreeClass, this, panelByDirectory, insertModel);
 
         panelMenu.add(panelDirectory, BorderLayout.SOUTH);
 

@@ -21,7 +21,7 @@ public class TabHomePanel {
     private JButton copyPath;
     private JButton delete;
     private JButton rename;
-    private JButton createDirectory;
+    private JButton create;
     private JButton dropDownButton;
 
     private JLabel copyLabel;
@@ -45,7 +45,9 @@ public class TabHomePanel {
     /**
      * Constructor
      */
-    public TabHomePanel(JFrame frame, FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree, DisplayUsers displayUsers, PanelByDirectory panelByDirectory, InsertModel insertModel) {
+    public TabHomePanel(FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree,
+                        DisplayUsers displayUsers, PanelByDirectory panelByDirectory,
+                        InsertModel insertModel) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
@@ -67,18 +69,17 @@ public class TabHomePanel {
         addButtonItem(copyPath, "src/main/resources/images/paper-plane.png", 3);
         copyPath.addActionListener(new TabHomeCopyPathListener(fileToDirectoryModel, insertModel));
 
-        /*с этого места*/
         delete = new JButton();
         addButtonItem(delete, "src/main/resources/images/del.png", 4);
-        delete.addActionListener(new TabHomeDeleteListener(frame, fileToDirectoryModel,panelTree,displayUsers));
+        delete.addActionListener(new TabHomeDeleteListener(fileToDirectoryModel,panelTree,displayUsers));
 
         rename = new JButton();
         addButtonItem(rename, "src/main/resources/images/rename32.png", 5);
-        rename.addActionListener(new TabHomeRenameListener(frame, fileToDirectoryModel,panelTree,displayUsers));
+        rename.addActionListener(new TabHomeRenameListener(fileToDirectoryModel,panelTree,displayUsers));
 
-        createDirectory = new JButton();
-        addButtonItem(createDirectory, "src/main/resources/images/Folder.png", 6);
-        createDirectory.addActionListener(new TabHomeAddListener(frame, fileToDirectoryModel,panelTree,displayUsers));
+        create = new JButton();
+        addButtonItem(create, "src/main/resources/images/Folder.png", 6);
+        create.addActionListener(new TabHomeAddListener(fileToDirectoryModel,panelTree,displayUsers));
 
 
         toolbarDropDown = new JToolBar();

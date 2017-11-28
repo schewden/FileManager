@@ -102,12 +102,12 @@ public class TabHomeInsertListener implements ActionListener {
                             if (destDirList.contains(currentNameDir)) {
                                 count++;
                             } else {
-                                FileUtils.copyDirectoryToDirectory(srcDir, new File(destDir, currentNameDir));
+                                FileUtils.copyDirectory(srcDir, new File(destDir, currentNameDir));
                                 break;
                             }
                         }
                     } else if (!destDirList.contains(currentNameDir)) {
-                        FileUtils.copyDirectoryToDirectory(srcDir, new File(destDir, currentNameDir));
+                        FileUtils.copyDirectory(srcDir, new File(destDir, currentNameDir));
                     } else if (destDir.equals(srcDir)) {
                         String msg = "Нельзя скопировать каталог сам в себя!";
                         ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
@@ -117,16 +117,17 @@ public class TabHomeInsertListener implements ActionListener {
 
             } else {
                 FileUtils.moveDirectoryToDirectory(srcDir, destDir, true);
+                insertModel.setStorageCurrentTreePath(null);
             }
             File destFile = fileToDirectoryModel.getFileToDirectory();
             TreePath destTreePath = panelTree.getTreePathInJTree(destFile);
             if (!insertModel.isMarkCutFileOrDir()) {
-                DefaultMutableTreeNode parentDestDir = (DefaultMutableTreeNode) destTreePath.getLastPathComponent();
-                DefaultMutableTreeNode srcNewNode = new DefaultMutableTreeNode(srcDir);
-                panelTree.getDefaultTreeModel().insertNodeInto(srcNewNode, parentDestDir, parentDestDir.getChildCount());
+                panelTree.insertNodeIntoJTree(destTreePath,panelTree.getDefaultTreeModel(),nameSrcDir);
+                panelTree.getTreeDirectory().expandPath(destTreePath);
             } else {
                 panelTree.removeNodeFromJTree(srcTreePath, srcParentNode, panelTree.getDefaultTreeModel());
                 panelTree.insertNodeIntoJTree(destTreePath, panelTree.getDefaultTreeModel(), nameSrcDir);
+                panelTree.getTreeDirectory().expandPath(destTreePath);
             }
             fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
             displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
@@ -169,6 +170,7 @@ public class TabHomeInsertListener implements ActionListener {
                 }
             } else {
                 FileUtils.moveFileToDirectory(srcFile, destDir, true);
+                insertModel.setStorageCurrentTreePath(null);
             }
             fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
             displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());

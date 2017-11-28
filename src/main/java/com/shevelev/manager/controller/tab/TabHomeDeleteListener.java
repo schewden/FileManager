@@ -5,7 +5,6 @@ import com.shevelev.manager.view.DisplayUsers;
 import com.shevelev.manager.view.PanelTree;
 import org.apache.commons.io.FileUtils;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
@@ -14,32 +13,39 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by denis on 19.11.17.
+ * In this class, the delete button listener controller is implemented
  */
 public class TabHomeDeleteListener implements ActionListener {
-    private JFrame frame;
-    private FileToDirectoryModel FileToDirectoryModel;
+    private FileToDirectoryModel fileToDirectoryModel;
     private PanelTree panelTree;
     private DisplayUsers displayUsers;
 
-    private File currentSelectedFile;
-    private boolean deletedFile;
 
-
-    public TabHomeDeleteListener(JFrame frame, FileToDirectoryModel FileToDirectoryModel,
-                                 PanelTree panelTree,
-                                 DisplayUsers displayUsers) {
-        this.frame = frame;
-        this.FileToDirectoryModel = FileToDirectoryModel;
+    /**
+     *Constructor
+     *
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     */
+    public TabHomeDeleteListener(FileToDirectoryModel fileToDirectoryModel,
+                                 PanelTree panelTree, DisplayUsers displayUsers) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
         this.panelTree = panelTree;
         this.displayUsers = displayUsers;
     }
 
 
+    /**
+     *Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     public void actionPerformed(ActionEvent e) {
-        currentSelectedFile = FileToDirectoryModel.getSelectedDirectory();
+        File currentSelectedFile = fileToDirectoryModel.getSelectedDirectory();
         if (currentSelectedFile != null) {
             try {
+                boolean deletedFile;
                 if (currentSelectedFile.isDirectory()) {
                     FileUtils.deleteDirectory(currentSelectedFile);
                     deletedFile = true;
@@ -48,25 +54,25 @@ public class TabHomeDeleteListener implements ActionListener {
                     deletedFile = false;
                 }
                 if (deletedFile) {
+                    fileToDirectoryModel.setSelectedDirectory(null);
                     TreePath currentPath = panelTree.getTreePathInJTree(currentSelectedFile);
-                    //DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
-                    TreePath parentPath = panelTree.getTreePathInJTree(FileToDirectoryModel.getFileToDirectory());
+                    TreePath parentPath = panelTree.getTreePathInJTree(fileToDirectoryModel.getFileToDirectory());
                     DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
                     panelTree.removeNodeFromJTree(currentPath,currentNode,panelTree.getDefaultTreeModel());
-                    //panelTree.getDefaultTreeModel().removeNodeFromParent(currentNode);
-                    FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
 
-                    displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+                    fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
+                    displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
                 } else {
-                    FileToDirectoryModel.setFileToDirectory(FileToDirectoryModel.getFileToDirectory());
-                    displayUsers.repaintGUI(FileToDirectoryModel.getListFilesAndDirectories());
+                    fileToDirectoryModel.setSelectedDirectory(null);
+                    fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
+                    displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         } else {
             String msg = "Вы не выбрали файл.Пожалуйста, выберите файл и повторите действия!";
-            ErrorMessage errorMessage = new ErrorMessage(frame);
+            ErrorMessage errorMessage = new ErrorMessage(displayUsers.getFrame());
             errorMessage.errorMessagePane(msg, "Ошибка удаления файла");
         }
 
