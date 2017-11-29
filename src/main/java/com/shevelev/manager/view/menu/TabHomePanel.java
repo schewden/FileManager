@@ -1,5 +1,6 @@
 package com.shevelev.manager.view.menu;
 
+import com.shevelev.manager.controller.tab.TabHomeSortListener;
 import com.shevelev.manager.controller.tab.*;
 import com.shevelev.manager.model.InsertModel;
 import com.shevelev.manager.model.FileToDirectoryModel;
@@ -42,6 +43,8 @@ public class TabHomePanel {
 
     private Font font;
 
+    private TabHomeSortListener tabHomeSortListener;
+
     /**
      * Constructor
      */
@@ -50,6 +53,8 @@ public class TabHomePanel {
                         InsertModel insertModel) {
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
+
+        tabHomeSortListener = new TabHomeSortListener(fileToDirectoryModel,displayUsers);
 
         font = new Font("Times New Roman", Font.ITALIC, 11);
 
@@ -154,7 +159,7 @@ public class TabHomePanel {
         dropDownButton = DropDownButtonFactory.createDropDownButton(new ImageIcon("src/main/resources/images/sortascend32.png"), popupMenuButton);
         addMenuItem(popupMenuButton,sortingName,"Имя");
         addMenuItem(popupMenuButton,sortingType,"Тип");
-        addMenuItem(popupMenuButton,sortingDate,"Дата создания");
+        addMenuItem(popupMenuButton,sortingDate,"Дата");
         addMenuItem(popupMenuButton,sortingSize,"Размер");
         newToolBar.add(dropDownButton);
         panel.add(newToolBar,new GridBagConstraints(7,0,1,1,0,0,GridBagConstraints.NORTH,GridBagConstraints.NONE,new Insets(2,2,0,2),0,0));
@@ -170,6 +175,7 @@ public class TabHomePanel {
     private void addMenuItem(JComponent menuHead, JMenuItem menuItem, String nameMenu){
         menuItem = new JMenuItem();
         menuItem.setText(nameMenu);
+        menuItem.addActionListener(tabHomeSortListener);
         menuHead.add(menuItem);
         menuItem.setFont(font);
     }

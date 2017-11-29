@@ -3,12 +3,17 @@ package com.shevelev.manager.view.menu;
 import javax.swing.*;
 import java.awt.*;
 
+
 /**
- * Created by denis on 20.11.17.
+ * In this class, a panel is implemented for renaming.
  */
 public class RenamePanel {
     private JPanel renamePanel;
     private JTextField name;
+
+    /**
+     * Constructor
+     */
     public RenamePanel(){
         renamePanel = new JPanel(new GridLayout(2,1));
         name = new JTextField(15);
@@ -16,10 +21,18 @@ public class RenamePanel {
         renamePanel.add(name);
     }
 
+    /**
+     * Function of obtaining the value of the panel
+     * @return renamePanel - this panel
+     */
     public JPanel getRenamePanel() {
         return renamePanel;
     }
 
+    /**
+     * Function of obtaining the JTextField
+     * @return name it is rename file.
+     */
     public JTextField getName() {
         return name;
     }

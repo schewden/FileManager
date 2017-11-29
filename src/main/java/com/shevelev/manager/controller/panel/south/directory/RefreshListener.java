@@ -6,8 +6,6 @@ import com.shevelev.manager.view.PanelTree;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RefreshListener implements ActionListener {
     private FileToDirectoryModel fileToDirectoryModel;
@@ -21,10 +19,11 @@ public class RefreshListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         File currentFile = fileToDirectoryModel.getFileToDirectory();
-        List<File> currentListParentFiles = new ArrayList<>();
-        panelTree.getTreeDirectory().clearSelection();
-        panelTree.getDefaultTreeModel().reload();
-        panelTree.getPathCurrentFileInJTree(currentFile,currentListParentFiles);
-
+        int row = panelTree.getTreeDirectory().getRowCount() - 1;
+        while (row > 0){
+            panelTree.getTreeDirectory().collapseRow(row);
+            row--;
+        }
+        panelTree.openCurrentFileInJTree(currentFile);
     }
 }
