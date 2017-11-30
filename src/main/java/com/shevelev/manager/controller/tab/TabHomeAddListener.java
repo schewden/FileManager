@@ -21,7 +21,7 @@ public class TabHomeAddListener implements ActionListener {
     private DisplayUsers displayUsers;
 
     /**
-     *Constructor
+     * Constructor
      *
      * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
      * @param panelTree            - panel by tree (PanelTree.java)

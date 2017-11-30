@@ -17,6 +17,7 @@ import java.awt.*;
  */
 public class TabHomePanel {
     private JPanel panel;
+
     private JButton insert;
     private JButton cut;
     private JButton copyPath;
@@ -36,6 +37,7 @@ public class TabHomePanel {
 
     private JToolBar toolbarDropDown;
     private JPopupMenu popupMenuButton;
+
     private JMenuItem sortingName;
     private JMenuItem sortingType;
     private JMenuItem sortingDate;
@@ -47,13 +49,19 @@ public class TabHomePanel {
 
     /**
      * Constructor
+     *
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     * @param panelByDirectory     - panel by directories (PanelByDirectory.java)
+     * @param insertModel          - model of inserting a directory or file (InsertModel.java)
      */
     public TabHomePanel(FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree,
                         DisplayUsers displayUsers, PanelByDirectory panelByDirectory,
                         InsertModel insertModel) {
+
         panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-
         tabHomeSortListener = new TabHomeSortListener(fileToDirectoryModel,displayUsers);
 
         font = new Font("Times New Roman", Font.ITALIC, 11);

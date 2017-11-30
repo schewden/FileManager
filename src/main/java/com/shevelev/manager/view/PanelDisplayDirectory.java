@@ -11,32 +11,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * View of the center panel
  */
 public class PanelDisplayDirectory {
     private final String ICON_DIRECTORY = "src/main/resources/images/Folder.png";
     private final String ICON_FILE = "src/main/resources/images/documents32.png";
     private final Dimension DIMENSION_LABEL = new Dimension(106, 32);
-    private final Dimension DIMENSION_SCROLL_PANE = new Dimension(580, 390);
+    private final Dimension DIMENSION_SCROLL_PANE = new Dimension(580, 382);
 
     private JPanel panelInPanelCenter;
-    private JScrollPane scrollPane;
-    private JLabel badgeFile;
     private JPanel panelCenter;
 
     private FileToDirectoryModel fileToDirectoryModel;
-    private DisplayUsers displayUsers;
     private PanelTree panelTree;
-    private BackAndNextModel backAndNextModel;
     private BadgeInDirectoryMouseListener badgeInDirectoryMouseListener;
 
-
+    /**
+     * Constructor
+     *
+     * @param panelCenter          -  current JPanel is framed in a frame
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     * @param backAndNextModel     - model of travel back and forth (BackAndNextModel.java)
+     */
     public PanelDisplayDirectory(JPanel panelCenter, FileToDirectoryModel fileToDirectoryModel,
                                  DisplayUsers displayUsers, BackAndNextModel backAndNextModel) {
+
         this.panelCenter = panelCenter;
         this.fileToDirectoryModel = fileToDirectoryModel;
-        this.displayUsers = displayUsers;
-        this.backAndNextModel = backAndNextModel;
 
         panelInPanelCenter = new JPanel();
         panelInPanelCenter.setBackground(Color.WHITE);
@@ -47,23 +49,43 @@ public class PanelDisplayDirectory {
         updateCurrentDirectory(fileToDirectoryModel.getListFilesAndDirectories());
     }
 
+    /**
+     * Function of obtaining the this panel in JScrollPane
+     *
+     * @return this JPanel(panelInPanelCenter)
+     */
     public JPanel getPanelInPanelCenter() {
         return panelInPanelCenter;
     }
 
+    /**
+     * Function of obtaining the class PanelTree(PanelTree.java)
+     *
+     * @return instance PanelTree
+     */
     public PanelTree getPanelTree() {
         return panelTree;
     }
 
+    /**
+     * Function set instance PanelTree
+     *
+     * @param panelTree - instance PanelTree
+     */
     public void setPanelTree(PanelTree panelTree) {
         this.panelTree = panelTree;
     }
 
+    /**
+     * Procedure add JLabel in panelCenter
+     *
+     * @param currentFiles - list files in current directory
+     */
     public void updateCurrentDirectory(List<File> currentFiles) {
         List<File> directoryList = new ArrayList<>();
         List<File> fileList = new ArrayList<>();
         for (File currentFile : currentFiles) {
-            badgeFile = new JLabel(currentFile.getName());
+            JLabel badgeFile = new JLabel(currentFile.getName());
             if (currentFile.isDirectory()) {
                 badgeFile.setIcon(new ImageIcon(ICON_DIRECTORY));
                 directoryList.add(currentFile);
@@ -79,7 +101,7 @@ public class PanelDisplayDirectory {
 
             panelInPanelCenter.add(badgeFile);
         }
-        scrollPane = new JScrollPane(panelInPanelCenter, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scrollPane = new JScrollPane(panelInPanelCenter, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(DIMENSION_SCROLL_PANE);
         panelCenter.add(scrollPane);
     }

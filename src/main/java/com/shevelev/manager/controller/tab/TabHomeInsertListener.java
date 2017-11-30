@@ -122,7 +122,7 @@ public class TabHomeInsertListener implements ActionListener {
             File destFile = fileToDirectoryModel.getFileToDirectory();
             TreePath destTreePath = panelTree.getTreePathInJTree(destFile);
             if (!insertModel.isMarkCutFileOrDir()) {
-                panelTree.insertNodeIntoJTree(destTreePath,panelTree.getDefaultTreeModel(),nameSrcDir);
+                panelTree.insertNodeIntoJTree(destTreePath, panelTree.getDefaultTreeModel(), nameSrcDir);
                 panelTree.getTreeDirectory().expandPath(destTreePath);
             } else {
                 panelTree.removeNodeFromJTree(srcTreePath, srcParentNode, panelTree.getDefaultTreeModel());

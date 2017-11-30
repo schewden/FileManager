@@ -10,34 +10,26 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Created by denis on 17.10.17.
+ * View of head project
  */
 public class DisplayUsers {
     private JFrame frame;
-
-    private JPanel panelMenu;
     private JPanel panelCenter;
-    private JPanel panelDirectory;
-    private JPanel panelTree;
     private JPanel panelInfo;
-
-    private FileToDirectoryModel fileToDirectoryModel;
-    private BackAndNextModel backAndNextModel;
-    private InsertModel insertModel;
-
     private PanelDisplayDirectory panelDisplayDirectory;
-    private PanelTree panelTreeClass;
     private PanelInfoAboutDirectory panelInfoAboutDirectory;
-    private PanelByDirectory panelByDirectory;
 
+    /**
+     * Constructor head project DeeShev
+     */
     public DisplayUsers() {
-        frame = new JFrame("FM DiiShev");
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame = new JFrame("File manager \"DeeShev\"");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(800, 600));
 
-        fileToDirectoryModel = new FileToDirectoryModel();
-        backAndNextModel = new BackAndNextModel();
-        insertModel = new InsertModel();
+        FileToDirectoryModel fileToDirectoryModel = new FileToDirectoryModel();
+        BackAndNextModel backAndNextModel = new BackAndNextModel();
+        InsertModel insertModel = new InsertModel();
 
         File rootSystem = new File("/");
 
@@ -52,14 +44,14 @@ public class DisplayUsers {
         frame.add(panelCenter, BorderLayout.CENTER);
         panelDisplayDirectory = new PanelDisplayDirectory(panelCenter, fileToDirectoryModel, this, backAndNextModel);
 
-        panelTree = new JPanel();
+        JPanel panelTree = new JPanel();
         frame.add(panelTree, BorderLayout.WEST);
-        panelTreeClass = new PanelTree(panelDisplayDirectory, panelTree, fileToDirectoryModel, this, backAndNextModel);
+        PanelTree panelTreeClass = new PanelTree(panelDisplayDirectory, panelTree, fileToDirectoryModel, this, backAndNextModel);
 
-        panelDirectory = new JPanel();
-        panelByDirectory = new PanelByDirectory(panelDirectory, panelTreeClass, fileToDirectoryModel, this, backAndNextModel);
+        JPanel panelDirectory = new JPanel();
+        PanelByDirectory panelByDirectory = new PanelByDirectory(panelDirectory, panelTreeClass, fileToDirectoryModel, this, backAndNextModel);
 
-        panelMenu = new JPanel();
+        JPanel panelMenu = new JPanel();
         frame.add(panelMenu, BorderLayout.NORTH);
         new TopMenuBar(panelMenu, fileToDirectoryModel, panelTreeClass, this, panelByDirectory, insertModel);
 
@@ -71,10 +63,18 @@ public class DisplayUsers {
         frame.setVisible(true);
     }
 
+    /**
+     * Function get frame
+     * @return this frame
+     */
     public JFrame getFrame() {
         return frame;
     }
 
+    /**
+     *  Procedure repaint this frame (repaint panelDisplayDirectory and panelInfo).
+     * @param currentFiles - list files in current directory
+     */
     public void repaintGUI(List<File> currentFiles) {
         panelDisplayDirectory.getPanelInPanelCenter().removeAll();
         panelCenter.removeAll();

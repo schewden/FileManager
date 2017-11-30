@@ -22,7 +22,7 @@ public class TabHomeDeleteListener implements ActionListener {
 
 
     /**
-     *Constructor
+     * Constructor
      *
      * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
      * @param panelTree            - panel by tree (PanelTree.java)
@@ -37,7 +37,7 @@ public class TabHomeDeleteListener implements ActionListener {
 
 
     /**
-     *Invoked when an action occurs.
+     * Invoked when an action occurs.
      *
      * @param e is an instance of ActionEvent class
      */
@@ -58,7 +58,7 @@ public class TabHomeDeleteListener implements ActionListener {
                     TreePath currentPath = panelTree.getTreePathInJTree(currentSelectedFile);
                     TreePath parentPath = panelTree.getTreePathInJTree(fileToDirectoryModel.getFileToDirectory());
                     DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
-                    panelTree.removeNodeFromJTree(currentPath,currentNode,panelTree.getDefaultTreeModel());
+                    panelTree.removeNodeFromJTree(currentPath, currentNode, panelTree.getDefaultTreeModel());
 
                     fileToDirectoryModel.setFileToDirectory(fileToDirectoryModel.getFileToDirectory());
                     displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());

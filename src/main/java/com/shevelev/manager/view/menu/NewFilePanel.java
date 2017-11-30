@@ -23,9 +23,9 @@ public class NewFilePanel {
         ButtonGroup bg = new ButtonGroup();
         bg.add(newTypeFile);
         bg.add(newTypeDirectory);
+
         southRadio.add(newTypeFile);
         southRadio.add(newTypeDirectory);
-
         name = new JTextField(10);
 
         newFilePanel.add(new JLabel("Имя "), BorderLayout.WEST );

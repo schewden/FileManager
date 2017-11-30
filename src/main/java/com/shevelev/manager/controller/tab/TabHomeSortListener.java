@@ -10,10 +10,9 @@ import java.awt.event.ActionListener;
 /**
  * In this class, the sort button listener controller is implemented
  */
-public class TabHomeSortListener implements ActionListener{
+public class TabHomeSortListener implements ActionListener {
     private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
-
 
     /**
      * Constructor
@@ -21,7 +20,7 @@ public class TabHomeSortListener implements ActionListener{
      * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
      * @param displayUsers         - head panel (DisplayUsers.java)
      */
-    public TabHomeSortListener(FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers){
+    public TabHomeSortListener(FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers) {
         this.fileToDirectoryModel = fileToDirectoryModel;
         this.displayUsers = displayUsers;
     }
@@ -34,26 +33,26 @@ public class TabHomeSortListener implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         JMenuItem menuItem = (JMenuItem) e.getSource();
-        if (menuItem.getText().equals("Имя")){
+        if (menuItem.getText().equals("Имя")) {
             fileToDirectoryModel.setName(true);
             fileToDirectoryModel.setType(false);
             fileToDirectoryModel.setData(false);
             fileToDirectoryModel.setSize(false);
             displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
 
-        }else if (menuItem.getText().equals("Тип")){
+        } else if (menuItem.getText().equals("Тип")) {
             fileToDirectoryModel.setType(true);
             fileToDirectoryModel.setName(false);
             fileToDirectoryModel.setData(false);
             fileToDirectoryModel.setSize(false);
             displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
-        }else if (menuItem.getText().equals("Дата")){
+        } else if (menuItem.getText().equals("Дата")) {
             fileToDirectoryModel.setType(false);
             fileToDirectoryModel.setName(false);
             fileToDirectoryModel.setData(true);
             fileToDirectoryModel.setSize(false);
             displayUsers.repaintGUI(fileToDirectoryModel.getListFilesAndDirectories());
-        }else {
+        } else {
             fileToDirectoryModel.setType(false);
             fileToDirectoryModel.setName(false);
             fileToDirectoryModel.setData(false);
