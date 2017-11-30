@@ -31,7 +31,7 @@ public class PanelByDirectory {
 
         JButton buttonBack = new JButton();
         addButtonItem(buttonBack, "src/main/resources/images/previous.png");
-        panel.add(buttonBack, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 2, 0, 2), 0, 0));
+        panel.add(buttonBack, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 5, 0, 2), 0, 0));
         buttonBack.addActionListener(new BackListener(fileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
 
         JButton buttonNext = new JButton();
@@ -56,7 +56,7 @@ public class PanelByDirectory {
 
         JButton buttonSearch = new JButton();
         addButtonItem(buttonSearch, "src/main/resources/images/search.png");
-        panel.add(buttonSearch, new GridBagConstraints(10, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 0, 0, 2), 0, 0));
+        panel.add(buttonSearch, new GridBagConstraints(10, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 0, 0, 5), 0, 0));
     }
 
     /**

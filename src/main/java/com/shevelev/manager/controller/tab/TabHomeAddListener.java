@@ -38,6 +38,7 @@ public class TabHomeAddListener implements ActionListener {
      *
      * @param e is an instance of ActionEvent class
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         NewFilePanel newFilePanel = new NewFilePanel();
         UIManager.put("OptionPane.yesButtonText", "Создать");

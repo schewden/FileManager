@@ -12,16 +12,29 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * In this class, the search file listener controller is implemented
+ */
 public class FileSearchListener implements ActionListener {
     private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
 
+    /**
+     * Constructor
+     *
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     */
     public FileSearchListener(FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers) {
         this.fileToDirectoryModel = fileToDirectoryModel;
         this.displayUsers = displayUsers;
     }
 
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         SearchModel searchModel = new SearchModel();
@@ -32,7 +45,7 @@ public class FileSearchListener implements ActionListener {
         List<String> currentFilesStringInDirectory = new ArrayList<>();
 
         searchModel.setCurrentFilesStringInDirectory(currentFilesStringInDirectory);
-        searchModel.setCurrentFilesInDirectory1(fileToDirectoryModel.getFileToDirectory(), currentFilesInDirectory);
+        searchModel.setCurrentFilesInDirectory(fileToDirectoryModel.getFileToDirectory(), currentFilesInDirectory);
 
         List<File> foundListFiles = new ArrayList<>();
         for (int i = 0; i < currentFilesInDirectory.size(); i++) {

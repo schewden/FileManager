@@ -7,15 +7,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * In this class, the refresh button listener controller is implemented
+ */
 public class RefreshListener implements ActionListener {
     private FileToDirectoryModel fileToDirectoryModel;
     private PanelTree panelTree;
 
+    /**
+     * Constructor
+     *
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     */
     public RefreshListener(FileToDirectoryModel fileToDirectoryModel, PanelTree panelTree){
         this.fileToDirectoryModel = fileToDirectoryModel;
         this.panelTree = panelTree;
     }
 
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         File currentFile = fileToDirectoryModel.getFileToDirectory();

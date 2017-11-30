@@ -10,12 +10,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * In this class, the back button listener controller is implemented
+ */
 public class BackListener implements ActionListener {
     private FileToDirectoryModel fileToDirectoryModel;
     private DisplayUsers displayUsers;
     private PanelTree panelTree;
     private BackAndNextModel backAndNextModel;
 
+    /**
+     * Constructor
+     *
+     * @param panelTree            - panel by tree (PanelTree.java)
+     * @param fileToDirectoryModel - model by files (fileToDirectoryModel.java)
+     * @param displayUsers         - head panel (DisplayUsers.java)
+     * @param backAndNextModel     - model of travel back and forth (BackAndNextModel.java)
+     */
     public BackListener(FileToDirectoryModel fileToDirectoryModel, DisplayUsers displayUsers,
                         PanelTree panelTree, BackAndNextModel backAndNextModel) {
         this.fileToDirectoryModel = fileToDirectoryModel;
@@ -24,6 +35,11 @@ public class BackListener implements ActionListener {
         this.backAndNextModel = backAndNextModel;
     }
 
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of ActionEvent class
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (backAndNextModel.getPreviousFiles().size() == 1) {

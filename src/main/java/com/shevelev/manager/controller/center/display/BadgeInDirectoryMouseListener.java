@@ -14,7 +14,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * In this class, the label listener controller is implemented in central panel.
+ * Example switching to directories.
+ */
 public class BadgeInDirectoryMouseListener extends MouseAdapter {
     private JLabel[] highlightBadge = new JLabel[1];
 
@@ -23,6 +26,14 @@ public class BadgeInDirectoryMouseListener extends MouseAdapter {
     private DisplayUsers displayUsers;
     private BackAndNextModel backAndNextModel;
 
+    /**
+     * Constructor
+     *
+     * @param panelDisplayDirectory - instance of the implementation class of the central panel (PanelDisplayDirectory.java)
+     * @param fileToDirectoryModel  - model by files (fileToDirectoryModel.java)
+     * @param displayUsers          - head panel (DisplayUsers.java)
+     * @param backAndNextModel      - model of travel back and forth (BackAndNextModel.java)
+     */
     public BadgeInDirectoryMouseListener(FileToDirectoryModel fileToDirectoryModel, PanelDisplayDirectory panelDisplayDirectory,
                                          DisplayUsers displayUsers, BackAndNextModel backAndNextModel) {
         this.fileToDirectoryModel = fileToDirectoryModel;
@@ -31,6 +42,11 @@ public class BadgeInDirectoryMouseListener extends MouseAdapter {
         this.backAndNextModel = backAndNextModel;
     }
 
+    /**
+     * Invoked when an action occurs.
+     *
+     * @param e is an instance of MouseEvent class
+     */
     public void mouseClicked(MouseEvent e) {
         fileToDirectoryModel.setSelectedDirectory(null);
 
@@ -40,7 +56,7 @@ public class BadgeInDirectoryMouseListener extends MouseAdapter {
         highlightCurrentBadge(badge, highlightBadge);
 
         if (e.getClickCount() == 1) {
-           List<File> fileList = new ArrayList<>(fileToDirectoryModel.getListFilesAndDirectories());
+            List<File> fileList = new ArrayList<>(fileToDirectoryModel.getListFilesAndDirectories());
             for (File aFileList : fileList) {
                 String fileNameInList = aFileList.getName();
                 if (fileNameInList.equals(badgeName)) {
@@ -70,11 +86,17 @@ public class BadgeInDirectoryMouseListener extends MouseAdapter {
         }
     }
 
-    private void highlightCurrentBadge(JLabel badge, JLabel[] highlightBadge){
-        if (highlightBadge[0] == null){
+    /**
+     * Select one file
+     *
+     * @param badge          - this label(file)
+     * @param highlightBadge - array of selected labels(files)
+     */
+    private void highlightCurrentBadge(JLabel badge, JLabel[] highlightBadge) {
+        if (highlightBadge[0] == null) {
             highlightBadge[0] = badge;
             badge.setBorder(BorderFactory.createLineBorder(Color.black));
-        }else {
+        } else {
             highlightBadge[0].setBorder(null);
             highlightBadge[0] = badge;
             badge.setBorder(BorderFactory.createLineBorder(Color.black));

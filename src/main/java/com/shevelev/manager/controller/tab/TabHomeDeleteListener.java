@@ -41,6 +41,7 @@ public class TabHomeDeleteListener implements ActionListener {
      *
      * @param e is an instance of ActionEvent class
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         File currentSelectedFile = fileToDirectoryModel.getSelectedDirectory();
         if (currentSelectedFile != null) {
