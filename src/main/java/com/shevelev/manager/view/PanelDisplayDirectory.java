@@ -25,6 +25,7 @@ public class PanelDisplayDirectory {
     private FileToDirectoryModel fileToDirectoryModel;
     private PanelTree panelTree;
     private BadgeInDirectoryMouseListener badgeInDirectoryMouseListener;
+    private JFileChooser chooser = new JFileChooser();
 
     /**
      * Constructor
@@ -81,25 +82,29 @@ public class PanelDisplayDirectory {
      *
      * @param currentFiles - list files in current directory
      */
-    public void updateCurrentDirectory(List<File> currentFiles) {
+    public void updateCurrentDirectory(List<File> currentFiles){
         List<File> directoryList = new ArrayList<>();
         List<File> fileList = new ArrayList<>();
         for (File currentFile : currentFiles) {
             JLabel badgeFile = new JLabel(currentFile.getName());
-            if (currentFile.isDirectory()) {
-                badgeFile.setIcon(new ImageIcon(ICON_DIRECTORY));
-                directoryList.add(currentFile);
-                fileToDirectoryModel.setDirectoriesList(directoryList);
-            } else {
-                fileList.add(currentFile);
-                fileToDirectoryModel.setFilesList(fileList);
-                badgeFile.setIcon(new ImageIcon(ICON_FILE));
-            }
-            badgeFile.setToolTipText(badgeFile.getText());
-            badgeFile.addMouseListener(badgeInDirectoryMouseListener);
-            badgeFile.setPreferredSize(DIMENSION_LABEL);
+            Icon icon =  chooser.getUI().getFileView(chooser).getIcon(currentFile);
+                if (currentFile.isDirectory()) {
+                    //badgeFile.setIcon(new ImageIcon(ICON_DIRECTORY));
 
-            panelInPanelCenter.add(badgeFile);
+                    badgeFile.setIcon(icon);
+                    directoryList.add(currentFile);
+                    fileToDirectoryModel.setDirectoriesList(directoryList);
+                } else {
+                    fileList.add(currentFile);
+                    fileToDirectoryModel.setFilesList(fileList);
+                    badgeFile.setIcon(icon);
+                    //badgeFile.setIcon(new ImageIcon(ICON_FILE));
+                }
+                badgeFile.setToolTipText(badgeFile.getText());
+                badgeFile.addMouseListener(badgeInDirectoryMouseListener);
+                badgeFile.setPreferredSize(DIMENSION_LABEL);
+
+                panelInPanelCenter.add(badgeFile);
         }
         JScrollPane scrollPane = new JScrollPane(panelInPanelCenter, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(DIMENSION_SCROLL_PANE);

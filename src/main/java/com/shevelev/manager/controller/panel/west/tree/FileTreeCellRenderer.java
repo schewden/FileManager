@@ -11,9 +11,9 @@ import java.io.File;
  * Displays an entry in a tree.
  */
 public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
-    private final String OPENICON = "src/main/resources/images/fileopen.png";
-    private final String CLOSEICON = "src/main/resources/images/filenew.png";
-    private final String LEAFCON = "src/main/resources/images/filenew.png";
+    private final String OPENICON = "images/fileopen.png";
+    private final String CLOSEICON = "images/filenew.png";
+    private final String LEAFCON = "images/filenew.png";
     private FileSystemView fileSystemView;
 
     public FileTreeCellRenderer() {
@@ -26,9 +26,9 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         File file = (File) node.getUserObject();
         setText(fileSystemView.getSystemDisplayName(file));
-        setOpenIcon(new ImageIcon(OPENICON));
-        setClosedIcon(new ImageIcon(CLOSEICON));
-        setLeafIcon(new ImageIcon(LEAFCON));
+        setOpenIcon(new ImageIcon(getClass().getClassLoader().getResource(OPENICON)));
+        setClosedIcon(new ImageIcon(getClass().getClassLoader().getResource(CLOSEICON)));
+        setLeafIcon(new ImageIcon(getClass().getClassLoader().getResource(LEAFCON)));
         return this;
     }
 

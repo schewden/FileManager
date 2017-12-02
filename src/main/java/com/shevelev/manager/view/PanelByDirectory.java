@@ -30,12 +30,12 @@ public class PanelByDirectory {
         Dimension dimension = new Dimension(34, 30);
 
         JButton buttonBack = new JButton();
-        addButtonItem(buttonBack, "src/main/resources/images/previous.png");
+        addButtonItem(buttonBack, "images/previous.png");
         panel.add(buttonBack, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 5, 0, 2), 0, 0));
         buttonBack.addActionListener(new BackListener(fileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
 
         JButton buttonNext = new JButton();
-        addButtonItem(buttonNext, "src/main/resources/images/next.png");
+        addButtonItem(buttonNext, "images/next.png");
         panel.add(buttonNext, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 2, 0, 2), 0, 0));
         buttonNext.addActionListener(new NextListener(fileToDirectoryModel, displayUsers, panelTree, backAndNextModel));
 
@@ -45,7 +45,7 @@ public class PanelByDirectory {
         addressBar.addActionListener(new AddressBarListener(panelTree, fileToDirectoryModel, displayUsers, backAndNextModel));
 
         JButton buttonRefresh = new JButton();
-        addButtonItem(buttonRefresh, "src/main/resources/images/recur.png");
+        addButtonItem(buttonRefresh, "images/recur.png");
         panel.add(buttonRefresh, new GridBagConstraints(8, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 2, 0, 2), 0, 0));
         buttonRefresh.addActionListener(new RefreshListener(fileToDirectoryModel, panelTree));
 
@@ -55,7 +55,7 @@ public class PanelByDirectory {
         fieldSearch.addActionListener(new FileSearchListener(fileToDirectoryModel, displayUsers));
 
         JButton buttonSearch = new JButton();
-        addButtonItem(buttonSearch, "src/main/resources/images/search.png");
+        addButtonItem(buttonSearch, "images/search.png");
         panel.add(buttonSearch, new GridBagConstraints(10, 0, 1, 1, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(5, 0, 0, 5), 0, 0));
     }
 
@@ -76,7 +76,7 @@ public class PanelByDirectory {
      */
     private void addButtonItem(JButton newButton, String pathButtonIcon) {
         newButton.setPreferredSize(new Dimension(34, 29));
-        newButton.setIcon(new ImageIcon(pathButtonIcon));
+        newButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource(pathButtonIcon)));
         newButton.setBackground(Color.WHITE);
     }
 }

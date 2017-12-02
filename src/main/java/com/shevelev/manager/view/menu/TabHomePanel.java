@@ -67,31 +67,31 @@ public class TabHomePanel {
         font = new Font("Times New Roman", Font.ITALIC, 11);
 
         JButton copy = new JButton();
-        addButtonItem(copy, "src/main/resources/images/copy.png", 0);
+        addButtonItem(copy, "images/copy.png", 0);
         copy.addActionListener(new TabHomeCopyListener(fileToDirectoryModel, insertModel, displayUsers));
 
         insert = new JButton();
-        addButtonItem(insert, "src/main/resources/images/documents32.png", 1);
+        addButtonItem(insert, "images/documents32.png", 1);
         insert.addActionListener(new TabHomeInsertListener(fileToDirectoryModel,panelByDirectory,panelTree,displayUsers, insertModel));
 
         cut = new JButton();
-        addButtonItem(cut, "src/main/resources/images/cut.png", 2);
+        addButtonItem(cut, "images/cut.png", 2);
         cut.addActionListener(new TabHomeCutListener(fileToDirectoryModel, insertModel,displayUsers));
 
         copyPath = new JButton();
-        addButtonItem(copyPath, "src/main/resources/images/paper-plane.png", 3);
+        addButtonItem(copyPath, "images/paper-plane.png", 3);
         copyPath.addActionListener(new TabHomeCopyPathListener(fileToDirectoryModel, insertModel));
 
         delete = new JButton();
-        addButtonItem(delete, "src/main/resources/images/del.png", 4);
+        addButtonItem(delete, "images/del.png", 4);
         delete.addActionListener(new TabHomeDeleteListener(fileToDirectoryModel,panelTree,displayUsers));
 
         rename = new JButton();
-        addButtonItem(rename, "src/main/resources/images/rename32.png", 5);
+        addButtonItem(rename, "images/rename32.png", 5);
         rename.addActionListener(new TabHomeRenameListener(fileToDirectoryModel,panelTree,displayUsers));
 
         create = new JButton();
-        addButtonItem(create, "src/main/resources/images/Folder.png", 6);
+        addButtonItem(create, "images/Folder.png", 6);
         create.addActionListener(new TabHomeAddListener(fileToDirectoryModel,panelTree,displayUsers));
 
 
@@ -140,7 +140,7 @@ public class TabHomePanel {
      * @param gridx - column
      */
     private void addButtonItem(JButton newButton, String pathButtonIcon,int gridx){
-        newButton.setIcon(new ImageIcon(pathButtonIcon));
+        newButton.setIcon(new ImageIcon(getClass().getClassLoader().getResource(pathButtonIcon)));
         newButton.setBackground(Color.WHITE);
         panel.add(newButton,new GridBagConstraints(gridx,0,1,1,0,0,GridBagConstraints.NORTH,GridBagConstraints.NONE,new Insets(2,2,0,2),0,0));
     }
@@ -164,7 +164,7 @@ public class TabHomePanel {
     private void addDropDownButton(JToolBar newToolBar){
         newToolBar.setFloatable(false);
         popupMenuButton = new JPopupMenu();
-        dropDownButton = DropDownButtonFactory.createDropDownButton(new ImageIcon("src/main/resources/images/sortascend32.png"), popupMenuButton);
+        dropDownButton = DropDownButtonFactory.createDropDownButton(new ImageIcon(getClass().getClassLoader().getResource("images/sortascend32.png")), popupMenuButton);
         addMenuItem(popupMenuButton,sortingName,"Имя");
         addMenuItem(popupMenuButton,sortingType,"Тип");
         addMenuItem(popupMenuButton,sortingDate,"Дата");

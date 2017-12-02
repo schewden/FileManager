@@ -1,5 +1,8 @@
 package com.shevelev.manager.view.menu;
 
+import com.shevelev.manager.controller.menu.MenuMouseListener;
+import com.shevelev.manager.model.FileToDirectoryModel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,15 +10,14 @@ import java.awt.*;
  * class top pane menu
  */
 public class ButtonFileMenu {
+    private FileToDirectoryModel fileToDirectoryModel;
 
     private JMenu openNewWindows;
-    private JMenu openCMD;
+    private JMenuItem openCMD;
     private JMenu reference;
     private JMenuItem closeFM;
     private JMenuItem openToNewWindows;
     private JMenuItem openToNewWindowsProcess;
-    private JMenuItem openCmdToDirectory;
-    private JMenuItem openCmdToDirectoryAdmin;
     private JMenuItem referenceFM;
     private JMenuItem aboutProgram;
     private Font font;
@@ -24,38 +26,34 @@ public class ButtonFileMenu {
      * Constructor
      * @param menuFile - submenu "File"
      */
-    public ButtonFileMenu(JMenu menuFile) {
+    public ButtonFileMenu(JMenu menuFile, FileToDirectoryModel fileToDirectoryModel) {
+        this.fileToDirectoryModel = fileToDirectoryModel;
+
         font = new Font("Times New Roman", Font.ITALIC, 14);
 
         openNewWindows = new JMenu();
-        addMenuItem(menuFile,openNewWindows,"Открыть в новом окне","src/main/resources/images/new.png");
+        addMenuItem(menuFile,openNewWindows,"Открыть в новом окне","images/new.png");
 
         openToNewWindows = new JMenuItem();
-        addMenuItem(openNewWindows,openToNewWindows,"Открыть в новом окне","src/main/resources/images/add232.png");
+        addMenuItem(openNewWindows,openToNewWindows,"Открыть в новом окне","images/add232.png");
 
         openToNewWindowsProcess = new JMenuItem();
-        addMenuItem(openNewWindows,openToNewWindowsProcess,"Открыть в новом окне нового процесса","src/main/resources/images/Process.png");
+        addMenuItem(openNewWindows,openToNewWindowsProcess,"Открыть в новом окне нового процесса","images/Process.png");
 
-        openCMD = new JMenu();
-        addMenuItem(menuFile,openCMD,"Открыть командную строку","src/main/resources/images/Terminal.png");
-
-        openCmdToDirectory = new JMenuItem();
-        addMenuItem(openCMD,openCmdToDirectory,"Открыть командную строку","src/main/resources/images/computer32.png");
-
-        openCmdToDirectoryAdmin = new JMenuItem();
-        addMenuItem(openCMD,openCmdToDirectoryAdmin,"Открыть командную строку как админ","src/main/resources/images/Admin.png");
+        openCMD = new JMenuItem();
+        addMenuItem(menuFile,openCMD,"Открыть командную строку","images/Terminal.png");
 
         reference = new JMenu();
-        addMenuItem(menuFile,reference,"Справка","src/main/resources/images/help.png");
+        addMenuItem(menuFile,reference,"Справка","images/help.png");
 
         referenceFM = new JMenuItem();
-        addMenuItem(reference,referenceFM,"Справка","src/main/resources/images/info32.png");
+        addMenuItem(reference,referenceFM,"Справка","images/info32.png");
 
         aboutProgram = new JMenuItem();
-        addMenuItem(reference,aboutProgram,"О программе", "src/main/resources/images/Faq.png");
+        addMenuItem(reference,aboutProgram,"О программе", "images/Faq.png");
 
         closeFM = new JMenuItem();
-        addMenuItem(menuFile,closeFM,"Закрыть", "src/main/resources/images/exit.png");
+        addMenuItem(menuFile,closeFM,"Закрыть", "images/exit.png");
     }
 
     /**
@@ -67,8 +65,9 @@ public class ButtonFileMenu {
      */
     private void addMenuItem(JComponent menuHead, JMenuItem menuItem, String nameMenu, String pathFileIcon){
         menuItem.setText(nameMenu);
-        menuItem.setIcon(new ImageIcon(pathFileIcon));
+        menuItem.setIcon(new ImageIcon(getClass().getClassLoader().getResource(pathFileIcon)));
         menuHead.add(menuItem);
+        menuItem.addActionListener(new MenuMouseListener(fileToDirectoryModel));
         menuItem.setFont(font);
     }
 }

@@ -1,6 +1,5 @@
 package com.shevelev.manager.view;
 
-import com.shevelev.manager.controller.menu.MenuMouseListener;
 import com.shevelev.manager.model.FileToDirectoryModel;
 import com.shevelev.manager.model.InsertModel;
 import com.shevelev.manager.view.menu.ButtonFileMenu;
@@ -38,7 +37,7 @@ public class TopMenuBar {
         menuFile.setOpaque(true);
         menuFile.setBackground(Color.LIGHT_GRAY);
         menuFile.setFont(font);
-        new ButtonFileMenu(menuFile);
+        new ButtonFileMenu(menuFile,fileToDirectoryModel);
         menuBar.add(menuFile);
 
         panelMenu.add(tabbedPane, BorderLayout.NORTH);
@@ -46,6 +45,6 @@ public class TopMenuBar {
         tabbedPane.setFont(font);
 
         displayUsers.getFrame().setJMenuBar(menuBar);
-        menuFile.addMouseListener(new MenuMouseListener(menuFile, tabbedPane));
+        //menuFile.addMouseListener(new MenuMouseListener(menuFile, tabbedPane));
     }
 }

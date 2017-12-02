@@ -8,6 +8,6 @@ import com.shevelev.manager.view.DisplayUsers;
 
 public class HeadFileManager {
     public static void main(String[] args) {
-        new DisplayUsers();
+            new DisplayUsers();
     }
 }

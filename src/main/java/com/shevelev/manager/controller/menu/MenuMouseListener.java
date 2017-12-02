@@ -1,50 +1,34 @@
 package com.shevelev.manager.controller.menu;
 
+import com.shevelev.manager.model.FileToDirectoryModel;
+
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Created by denis on 23.10.17.
  */
-public class MenuMouseListener implements MouseListener {
-    private JMenu menuFile;
-    JTabbedPane tabbedPane;
+public class MenuMouseListener implements ActionListener{
+    private FileToDirectoryModel fileToDirectoryModel;
 
-    public MenuMouseListener(JMenu menuFile, JTabbedPane tabbedPane) {
-        this.menuFile = menuFile;
-        this.tabbedPane = tabbedPane;
+    public MenuMouseListener(FileToDirectoryModel fileToDirectoryModel){
+        this.fileToDirectoryModel = fileToDirectoryModel;
     }
 
-    public void mouseClicked(MouseEvent e) {
-        if (!menuFile.isPopupMenuVisible()) {
-            tabbedPane.setVisible(true);
-        }else {
-            tabbedPane.setVisible(false);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JMenuItem menuItem = (JMenuItem) e.getSource();
+        try {
+            if (menuItem.getText().equals("Открыть командную строку")) {
+                Process proc = Runtime.getRuntime().exec("xterm");
+            }
+            if (menuItem.getText().equals("Закрыть")) {
+                System.exit(0);
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
-    }
-
-    public void mousePressed(MouseEvent e) {
-        if (!menuFile.isPopupMenuVisible()) {
-            tabbedPane.setVisible(true);
-        }else {
-            tabbedPane.setVisible(false);
-        }
-    }
-
-    public void mouseReleased(MouseEvent e) {
-        if (!menuFile.isPopupMenuVisible()) {
-            tabbedPane.setVisible(true);
-        }else {
-            tabbedPane.setVisible(false);
-        }
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void mouseExited(MouseEvent e) {
-
     }
 }

@@ -31,10 +31,11 @@ public class DisplayUsers {
         BackAndNextModel backAndNextModel = new BackAndNextModel();
         InsertModel insertModel = new InsertModel();
 
+        File desktop = new File(System.getProperty("user.home"));
         File rootSystem = new File("/");
 
-        fileToDirectoryModel.setFileToDirectory(rootSystem);
-        backAndNextModel.setPreviousFiles(rootSystem);
+        fileToDirectoryModel.setFileToDirectory(desktop);
+        backAndNextModel.setPreviousFiles(desktop);
 
         panelInfo = new JPanel();
         frame.add(panelInfo, BorderLayout.SOUTH);
